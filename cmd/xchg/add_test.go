@@ -33,6 +33,28 @@ func TestAddOK(t *testing.T) {
 	if str := strings.TrimSpace(resp.Body.String()); str != "null" {
 		t.Errorf("add: returned non-null result: '%s'", str)
 	}
+
+	qstr := `SELECT * FROM orders`
+	rows := mgr.Query(Order{}, qstr)
+	expect := []Order{
+		Order{1468248043, 100, -100, "AUD"},
+	}
+
+	var orders []Order
+	for rows.Next() {
+		var o Order
+		rows.Scan(&o)
+		orders = append(orders, o)
+	}
+
+	if err := rows.Err(); err != nil {
+		t.Fatalf("add: error reading records from db: %s", err)
+	}
+
+	msgs := validateOrders(expect, orders)
+	for _, msg := range msgs {
+		t.Errorf("add: %s", msg)
+	}
 }
 
 func TestAddDuplicated(t *testing.T) {
