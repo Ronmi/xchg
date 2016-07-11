@@ -49,7 +49,7 @@ func init() {
 func validateOrders(expect, actual []Order) (msgs []string) {
 	// too lazy to use smart algorithm XD
 	if len(actual) != len(expect) {
-		msgs = append(msgs, fmt.Sprintf("listall: expected %d records, got %d", len(expect), len(actual)))
+		msgs = append(msgs, fmt.Sprintf("expected %d records, got %d", len(expect), len(actual)))
 	}
 
 	counter := make(map[Order]int)
@@ -60,10 +60,10 @@ func validateOrders(expect, actual []Order) (msgs []string) {
 	for _, o := range actual {
 		cnt, ok := counter[o]
 		if !ok {
-			msgs = append(msgs, fmt.Sprintf("listall: unknown order: %#v", o))
+			msgs = append(msgs, fmt.Sprintf("unknown order: %#v", o))
 		}
 		if cnt > 0 {
-			msgs = append(msgs, fmt.Sprintf("listall: duplicated order: %#v", o))
+			msgs = append(msgs, fmt.Sprintf("duplicated order: %#v", o))
 		}
 		counter[o] = 1
 	}

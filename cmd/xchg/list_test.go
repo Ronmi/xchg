@@ -31,6 +31,6 @@ func TestList(t *testing.T) {
 
 	msgs := validateOrders(presetUSD, orders)
 	for _, msg := range msgs {
-		t.Error(msg)
+		t.Errorf("list: %s", msg)
 	}
 }

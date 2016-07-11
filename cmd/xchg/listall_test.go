@@ -31,6 +31,6 @@ func TestListAll(t *testing.T) {
 
 	msgs := validateOrders(presetData, orders)
 	for _, msg := range msgs {
-		t.Error(msg)
+		t.Errorf("listall: %s", msg)
 	}
 }
