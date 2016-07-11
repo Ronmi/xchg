@@ -1,17 +1,27 @@
 package main
 
 import (
+	"database/sql"
 	"net/http"
 	"strings"
 	"testing"
+
+	"git.ronmi.tw/ronmi/sdm"
 
 	"github.com/Patrolavia/jsonapi"
 )
 
 func TestAddOK(t *testing.T) {
-	h := &add{mgr}
+	db, err := sql.Open("sqlite3", ":memory:")
+	if err != nil {
+		t.Fatalf("Cannot connect to another db: %s", err)
+	}
+	initTable(db)
+	defer db.Close()
 
-	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/add", "", `{"when":1468248043,"foreign":100,"local":-100,"code":"USD"}`)
+	h := &add{sdm.New(db)}
+
+	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/add", "", `{"when":1468248043,"foreign":100,"local":-100,"code":"AUD"}`)
 
 	if err != nil {
 		t.Fatalf("unexpected error occured when testing add: %s", err)
