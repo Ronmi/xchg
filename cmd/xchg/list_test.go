@@ -34,3 +34,24 @@ func TestList(t *testing.T) {
 		t.Errorf("list: %s", msg)
 	}
 }
+
+func TestListEmpty(t *testing.T) {
+	h := &list{mgr}
+
+	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/list", "", `{"code":"NTD"}`)
+
+	if err != nil {
+		t.Fatalf("unexpected error occured when testing list: %s", err)
+	}
+
+	if resp.Code != http.StatusOK {
+		t.Fatalf("unexpected error occured when testing list with status code %d: %s", resp.Code, resp.Body.String())
+	}
+
+	if resp.Body == nil {
+		t.Fatal(resp)
+	}
+	if str := resp.Body.String(); str != "[]" {
+		t.Errorf("list: not returning empty array: %s", str)
+	}
+}
