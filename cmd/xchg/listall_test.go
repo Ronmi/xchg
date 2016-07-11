@@ -29,25 +29,8 @@ func TestListAll(t *testing.T) {
 		t.Fatalf("cannot encode returned data from listall: %s", err)
 	}
 
-	// too lazy to use smart algorithm XD
-	if len(orders) != len(presetData) {
-		t.Errorf("listall: expected %d records, got %d", len(presetData), len(orders))
+	msgs := validateOrders(presetData, orders)
+	for _, msg := range msgs {
+		t.Error(msg)
 	}
-
-	counter := make(map[Order]int)
-	for _, data := range presetData {
-		counter[data] = 0
-	}
-
-	for _, o := range orders {
-		cnt, ok := counter[o]
-		if !ok {
-			t.Errorf("listall: unknown order: %#v", o)
-		}
-		if cnt > 0 {
-			t.Errorf("listall: duplicated order: %#v", o)
-		}
-		counter[o] = 1
-	}
-
 }

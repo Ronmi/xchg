@@ -29,25 +29,8 @@ func TestList(t *testing.T) {
 		t.Fatalf("cannot encode returned data from list: %s", err)
 	}
 
-	// too lazy to use smart algorithm XD
-	if len(orders) != len(presetUSD) {
-		t.Errorf("list: expected %d records, got %d", len(presetUSD), len(orders))
+	msgs := validateOrders(presetUSD, orders)
+	for _, msg := range msgs {
+		t.Error(msg)
 	}
-
-	counter := make(map[Order]int)
-	for _, data := range presetUSD {
-		counter[data] = 0
-	}
-
-	for _, o := range orders {
-		cnt, ok := counter[o]
-		if !ok {
-			t.Errorf("list: unknown order: %#v", o)
-		}
-		if cnt > 0 {
-			t.Errorf("list: duplicated order: %#v", o)
-		}
-		counter[o] = 1
-	}
-
 }
