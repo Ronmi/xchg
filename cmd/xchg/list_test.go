@@ -52,6 +52,6 @@ func TestListEmpty(t *testing.T) {
 		t.Fatal(resp)
 	}
 	if str := resp.Body.String(); str != "[]" {
-		t.Errorf("list: not returning empty array: %s", str)
+		t.Errorf("list: not returning empty array: '%s'", str)
 	}
 }
