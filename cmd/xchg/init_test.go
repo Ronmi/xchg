@@ -14,7 +14,9 @@ func initDB(presetData []Order) (mgr *sdm.Manager, err error) {
 		return
 	}
 
-	initTable(db)
+	if err = initTable(db); err != nil {
+		return
+	}
 	mgr = sdm.New(db)
 
 	// create preset data

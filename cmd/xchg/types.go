@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"log"
 
 	"git.ronmi.tw/ronmi/sdm"
 )
@@ -19,7 +18,7 @@ type Order struct {
 }
 
 // This will be called at very begining of the program, just fail fast.
-func initTable(db *sql.DB) {
+func initTable(db *sql.DB) error {
 	qstr := `CREATE TABLE IF NOT EXISTS orders (
   order_when INTEGER,
   foreign_currency DOUBLE,
@@ -29,8 +28,10 @@ func initTable(db *sql.DB) {
 )`
 
 	if _, err := db.Exec(qstr); err != nil {
-		log.Fatalf("Some error occured when creating order table in database: %s", err)
+		return err
 	}
+
+	return nil
 }
 
 func computeOrder(rows *sdm.Rows) (foreign, local, rate float64, err error) {
