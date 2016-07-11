@@ -17,7 +17,7 @@ func (h *listall) Handle(enc *json.Encoder, dec *json.Decoder, httpData *jsonapi
 	qstr := `SELECT * FROM orders`
 	rows := h.M.Query(Order{}, qstr)
 
-	var ret []Order
+	ret := make([]Order, 0)
 	for rows.Next() {
 		var o Order
 		rows.Scan(&o)

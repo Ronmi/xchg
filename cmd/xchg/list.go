@@ -35,7 +35,7 @@ func (h *list) Handle(enc *json.Encoder, dec *json.Decoder, httpData *jsonapi.HT
 	qstr := `SELECT * FROM orders WHERE currency_code=?`
 	rows := h.M.Query(Order{}, qstr, strings.ToUpper(param.Code))
 
-	var ret []Order
+	ret := make([]Order, 0)
 	for rows.Next() {
 		var o Order
 		rows.Scan(&o)
