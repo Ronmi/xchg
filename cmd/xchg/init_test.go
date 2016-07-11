@@ -12,6 +12,7 @@ var (
 	db         *sql.DB
 	mgr        *sdm.Manager
 	presetData []Order
+	presetUSD  []Order
 )
 
 func init() {
@@ -29,6 +30,11 @@ func init() {
 		Order{1468248040, -50, 51, "USD"},
 		Order{1468248041, 100, -100, "JPY"},
 		Order{1468248042, -50, 51, "JPY"},
+	}
+
+	presetUSD = []Order{
+		presetData[0],
+		presetData[1],
 	}
 
 	// create preset data
