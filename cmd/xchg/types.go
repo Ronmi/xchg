@@ -20,12 +20,12 @@ type Order struct {
 
 // This will be called at very begining of the program, just fail fast.
 func initTable(db *sql.DB) {
-	qstr := `CREATE TABLE IF NOT EXIST orders (
-  order_when TIMESTAMP,
+	qstr := `CREATE TABLE IF NOT EXISTS orders (
+  order_when INTEGER,
   foreign_currency DOUBLE,
   local_currency DOUBLE,
   currency_code VARCHAR(3),
-  CONSTRAINT order_pk (order_when,currency_code)
+  CONSTRAINT order_pk PRIMARY KEY (order_when,currency_code)
 )`
 
 	if _, err := db.Exec(qstr); err != nil {
