@@ -10,6 +10,15 @@ import (
 )
 
 func TestList(t *testing.T) {
+	presetUSD := []Order{
+		Order{1468248039, 100, -100, "USD"},
+		Order{1468248040, -50, 51, "USD"},
+	}
+	mgr, err := initDB(presetUSD)
+	if err != nil {
+		t.Fatalf("Cannot initial database: %s", err)
+	}
+	defer mgr.Connection().Close()
 	h := &list{mgr}
 
 	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/list", "", `{"code":"USD"}`)
@@ -37,6 +46,11 @@ func TestList(t *testing.T) {
 }
 
 func TestListEmpty(t *testing.T) {
+	mgr, err := initDB([]Order{})
+	if err != nil {
+		t.Fatalf("Cannot initial database: %s", err)
+	}
+	defer mgr.Connection().Close()
 	h := &list{mgr}
 
 	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/list", "", `{"code":"NTD"}`)

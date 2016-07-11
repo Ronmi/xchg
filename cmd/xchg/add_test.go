@@ -1,25 +1,20 @@
 package main
 
 import (
-	"database/sql"
 	"net/http"
 	"strings"
 	"testing"
-
-	"git.ronmi.tw/ronmi/sdm"
 
 	"github.com/Patrolavia/jsonapi"
 )
 
 func TestAddOK(t *testing.T) {
-	db, err := sql.Open("sqlite3", ":memory:")
+	mgr, err := initDB([]Order{})
 	if err != nil {
-		t.Fatalf("Cannot connect to another db: %s", err)
+		t.Fatalf("Cannot initial database: %s", err)
 	}
-	initTable(db)
-	defer db.Close()
-
-	h := &add{sdm.New(db)}
+	defer mgr.Connection().Close()
+	h := &add{mgr}
 
 	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/add", "", `{"when":1468248043,"foreign":100,"local":-100,"code":"AUD"}`)
 
@@ -41,6 +36,14 @@ func TestAddOK(t *testing.T) {
 }
 
 func TestAddDuplicated(t *testing.T) {
+	presetData := []Order{
+		Order{1468248039, 100, -100, "USD"},
+	}
+	mgr, err := initDB(presetData)
+	if err != nil {
+		t.Fatalf("Cannot initial database: %s", err)
+	}
+	defer mgr.Connection().Close()
 	h := &add{mgr}
 
 	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/add", "", `{"when":1468248039,"foreign":100,"local":-100,"code":"USD"}`)
@@ -55,6 +58,11 @@ func TestAddDuplicated(t *testing.T) {
 }
 
 func TestAddBadParam(t *testing.T) {
+	mgr, err := initDB([]Order{})
+	if err != nil {
+		t.Fatalf("Cannot initial database: %s", err)
+	}
+	defer mgr.Connection().Close()
 	h := &add{mgr}
 
 	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/add", "", `{}`)

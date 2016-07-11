@@ -1,18 +1,26 @@
 package main
 
 import (
-	"database/sql"
 	"encoding/json"
 	"net/http"
 	"strings"
 	"testing"
 
-	"git.ronmi.tw/ronmi/sdm"
-
 	"github.com/Patrolavia/jsonapi"
 )
 
 func TestListAll(t *testing.T) {
+	presetData := []Order{
+		Order{1468248039, 100, -100, "USD"},
+		Order{1468248040, -50, 51, "USD"},
+		Order{1468248041, 100, -100, "JPY"},
+		Order{1468248042, -50, 51, "JPY"},
+	}
+	mgr, err := initDB(presetData)
+	if err != nil {
+		t.Fatalf("Cannot initial database: %s", err)
+	}
+	defer mgr.Connection().Close()
 	h := &listall{mgr}
 
 	resp, err := jsonapi.HandlerTest(h.Handle).Get("/api/listall", "")
@@ -40,14 +48,13 @@ func TestListAll(t *testing.T) {
 }
 
 func TestListAllEmpty(t *testing.T) {
-	db, err := sql.Open("sqlite3", ":memory:")
+	mgr, err := initDB([]Order{})
 	if err != nil {
-		t.Fatalf("Cannot connect to another db: %s", err)
+		t.Fatalf("Cannot initial database: %s", err)
 	}
-	initTable(db)
-	defer db.Close()
+	defer mgr.Connection().Close()
 
-	h := &listall{sdm.New(db)}
+	h := &listall{mgr}
 
 	resp, err := jsonapi.HandlerTest(h.Handle).Get("/api/listall", "")
 
