@@ -1,10 +1,6 @@
 package main
 
-import (
-	"database/sql"
-
-	"git.ronmi.tw/ronmi/sdm"
-)
+import "database/sql"
 
 // Order 代表用戶的外幣資產的變動。
 //
@@ -32,26 +28,4 @@ func initTable(db *sql.DB) error {
 	}
 
 	return nil
-}
-
-func computeOrder(rows *sdm.Rows) (foreign, local, rate float64, err error) {
-	for rows.Next() {
-		var data Order
-		rows.Scan(&data)
-		foreign += data.Foreign
-		local += data.Local
-	}
-
-	if foreign > 0 {
-		rate = local / foreign
-	}
-	err = rows.Err()
-	return
-}
-
-// Count 結算某外幣的所有交易
-func Count(code string, m *sdm.Manager) (foreign, local, rate float64, err error) {
-	qstr := `SELECT * FROM orders WHERE currency_code=?`
-
-	return computeOrder(m.Query(Order{}, qstr, code))
 }
