@@ -70,3 +70,41 @@ func TestListEmpty(t *testing.T) {
 		t.Errorf("list: not returning empty array: '%s'", str)
 	}
 }
+
+func TestListNoData(t *testing.T) {
+	mgr, err := initDB([]Order{})
+	if err != nil {
+		t.Fatalf("Cannot initial database: %s", err)
+	}
+	defer mgr.Connection().Close()
+	h := &list{mgr}
+
+	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/add", "", `{}`)
+
+	if err != nil {
+		t.Fatalf("unexpected error occured when testing add: %s", err)
+	}
+
+	if resp.Code != http.StatusBadRequest {
+		t.Fatalf("unexpected status code %d for bas request: %s", resp.Code, resp.Body.String())
+	}
+}
+
+func TestListNotJSON(t *testing.T) {
+	mgr, err := initDB([]Order{})
+	if err != nil {
+		t.Fatalf("Cannot initial database: %s", err)
+	}
+	defer mgr.Connection().Close()
+	h := &list{mgr}
+
+	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/add", "", `1234`)
+
+	if err != nil {
+		t.Fatalf("unexpected error occured when testing add: %s", err)
+	}
+
+	if resp.Code != http.StatusBadRequest {
+		t.Fatalf("unexpected status code %d for bas request: %s", resp.Code, resp.Body.String())
+	}
+}
