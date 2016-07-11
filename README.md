@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Ronmi/xchg.svg?branch=master)](https://travis-ci.org/Ronmi/xchg)
+
 一個用來練習 `go`/`typescript`/`vuejs` 的小專案，開發歷程詳見 git commit log
 
 # API 規格
