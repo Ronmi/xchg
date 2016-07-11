@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"net/http"
+	"strings"
 	"testing"
 
 	"git.ronmi.tw/ronmi/sdm"
@@ -61,7 +62,7 @@ func TestListAllEmpty(t *testing.T) {
 	if resp.Body == nil {
 		t.Fatal(resp)
 	}
-	if str := resp.Body.String(); str != "[]" {
+	if str := strings.TrimSpace(resp.Body.String()); str != "[]" {
 		t.Errorf("listall: not returning empty array: '%s'", str)
 	}
 }

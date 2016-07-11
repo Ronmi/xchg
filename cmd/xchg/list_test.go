@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"net/http"
+	"strings"
 	"testing"
 
 	"github.com/Patrolavia/jsonapi"
@@ -51,7 +52,7 @@ func TestListEmpty(t *testing.T) {
 	if resp.Body == nil {
 		t.Fatal(resp)
 	}
-	if str := resp.Body.String(); str != "[]" {
+	if str := strings.TrimSpace(resp.Body.String()); str != "[]" {
 		t.Errorf("list: not returning empty array: '%s'", str)
 	}
 }
