@@ -11,7 +11,7 @@ import (
 func TestList(t *testing.T) {
 	h := &list{mgr}
 
-	resp, err := jsonapi.HandlerTest(h.Handle).Get("/api/list", "")
+	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/list", "", `{"code":"USD"}`)
 
 	if err != nil {
 		t.Fatalf("unexpected error occured when testing list: %s", err)
