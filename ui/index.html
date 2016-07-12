@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+  <head>
+    <meta charset="utf-8">
+    <title>外匯交易小幫手</title>
+  </head>
+  <body>
+    <div id="app">
+      <div>
+	<form action="#">
+	  <fieldset>
+	    <legend>新增</legend>
+	    <label for="date">
+	      <span>交易時間</span>
+	      <input name="date" type="datetime"/>
+	    </label>
+	    <label for="currency">
+	      <span>幣別</span>
+	      <select name="currency">
+		<option value="USD">美元</option>
+		<option value="JPY">日圓</option>
+		<option value="EUR">歐元</option>
+		<option value="AUD">澳幣</option>
+	      </select>
+	    </label>
+	    <label for="foreign">
+	      <span>金額(買入為正)</span>
+	      <input name="foreign" type="number" step="0.01"/>
+	    </label>
+	    <label for="local">
+	      <span>成本(買入為負)</span>
+	      <input name="local" type="number" step="0.01"/>
+	    </label>
+	    <button>送出</button>
+	  </fieldset>
+	</form>
+      </div>
+      <div>
+	<table>
+	  <caption>交易記錄</caption>
+	  <thead>
+	    <tr>
+	      <th>交易時間</th>
+	      <th>幣別</th>
+	      <th>金額</th>
+	      <th>成本</th>
+	      <th>匯率</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	    <tr>
+	      <td class="time">2016-7-12 12:34:56</td>
+	      <td class="currency">美元</td>
+	      <td class="foreign">100</td>
+	      <td class="local">-3300</td>
+	      <td class="rate">33.0000</td>
+	    </tr>
+	    <tr>
+	      <td class="time">2016-7-12 12:34:57</td>
+	      <td class="currency">美元</td>
+	      <td class="foreign">-50</td>
+	      <td class="local">1700</td>
+	      <td class="rate">34.0000</td>
+	    </tr>
+	    <tr>
+	      <td class="time">2016-7-12 12:34:58</td>
+	      <td class="currency">日圓</td>
+	      <td class="foreign">10000</td>
+	      <td class="local">-3333</td>
+	      <td class="rate">0.3333</td>
+	    </tr>
+	  </tbody>
+	</table>
+      </div>
+    </div>
+  </body>
+</html>
