@@ -1,0 +1,73 @@
+#app {
+    width: 310px;
+    margin: 5px auto;
+}
+
+div.insert {
+    margin-bottom: 1.1em;
+}
+
+label {
+    display: inline-block;
+    padding: 3px 0px;
+    width: 100%;
+}
+
+label>span {
+    display: block;
+    color: #9e9e9e;
+}
+
+input {
+    border: none;
+    border-bottom: 1px solid #9e9e9e;
+    height: 1.5em;
+    width: inherit;
+}
+
+label[for="foreign"] {
+    width: 75%;
+}
+
+label[for="foreign"] input {
+    width: 100%;
+}
+
+label[for="currency"] {
+    width: calc(25% - 7px);
+}
+
+button {
+    border: 1px solid #9e9e9e;
+    border-radius: 5px;
+    margin: 3px 0px;
+    width: 100%;
+}
+
+.list td {
+    vertical-align: middle;
+}
+
+.list th {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.list tbody td {
+    border-top: 1px solid #9e9e9e;
+    padding: 3px 3px;
+}
+
+td.time {
+    text-align: center;
+}
+
+td.foreign,td.local,td.rate {
+    width: 20%;
+    text-align: right;
+}
+
+td.currency {
+    width: 10%;
+    text-align: center;
+}

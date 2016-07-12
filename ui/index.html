@@ -3,10 +3,12 @@
   <head>
     <meta charset="utf-8">
     <title>外匯交易小幫手</title>
+    <link href="css/normalize.css" rel="stylesheet"/>
+    <link href="css/main.css" rel="stylesheet"/>
   </head>
   <body>
     <div id="app">
-      <div>
+      <div class="insert">
 	<form action="#">
 	  <fieldset>
 	    <legend>新增</legend>
@@ -14,29 +16,31 @@
 	      <span>交易時間</span>
 	      <input name="date" type="datetime"/>
 	    </label>
-	    <label for="currency">
-	      <span>幣別</span>
-	      <select name="currency">
-		<option value="USD">美元</option>
-		<option value="JPY">日圓</option>
-		<option value="EUR">歐元</option>
-		<option value="AUD">澳幣</option>
-	      </select>
-	    </label>
-	    <label for="foreign">
-	      <span>金額(買入為正)</span>
-	      <input name="foreign" type="number" step="0.01"/>
-	    </label>
 	    <label for="local">
 	      <span>成本(買入為負)</span>
 	      <input name="local" type="number" step="0.01"/>
 	    </label>
+	    <div class="foreign">
+	      <label for="foreign">
+		<span>金額(買入為正)</span>
+		<input name="foreign" type="number" step="0.01"/>
+	      </label>
+	      <label for="currency">
+		<span>幣別</span>
+		<select name="currency">
+		  <option value="USD">美元</option>
+		  <option value="JPY">日圓</option>
+		  <option value="EUR">歐元</option>
+		  <option value="AUD">澳幣</option>
+		</select>
+	      </label>
+	    </div>
 	    <button>送出</button>
 	  </fieldset>
 	</form>
       </div>
-      <div>
-	<table>
+      <div class="list">
+	<table cellspacing="0">
 	  <caption>交易記錄</caption>
 	  <thead>
 	    <tr>
