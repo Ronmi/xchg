@@ -36,16 +36,16 @@
 		</select>
 	      </label>
 	    </div>
-	    <select v-model="orderType" @change="getOrders()">
-	      <option value="">全部</option>
-	      <template v-for="(code, name) in T">
-		<option :value="code">{{name}}</option>
-	      </template>
-	    </select>
 	    <button @click="addOrder">送出</button>
 	  </fieldset>
 	</form>
       </div>
+      <select v-model="orderType" @change="getOrders()" class="list-type">
+	<option value="">全部</option>
+	<template v-for="(code, name) in T">
+	  <option :value="code">{{name}}</option>
+	</template>
+      </select>
       <order-list :order-type="orderType" :orders="orders"></order-list>
     </div>
     <script src="js/bundle.js"></script>
