@@ -16,6 +16,7 @@
   "author": "Ronmi Ren <ronmi.ren@gmail.com>",
   "license": "GPL-3.0",
   "dependencies": {
+    "jquery": "^3.1.0",
     "vue": "^1.0.26"
   },
   "devDependencies": {
