@@ -26,7 +26,7 @@ let vm = new Vue({
     el: "#app",
     data:{
  	T: T,
-	form: <OrderData>{
+	form: {
 	    when: '',
 	    local: 0,
 	    foreign: 0,
@@ -37,9 +37,26 @@ let vm = new Vue({
     methods: {
 	getOrders: function() {
 	    $.getJSON("/api/listall", {}, (data:any, status:string, xhr:JQueryXHR) => {
-		console.log(this);
 		this.$data.orders = data as OrderData[];
 	    })
+	},
+	addOrder: function() {
+	    let data = {
+		when: Math.floor((new Date(this.form.when)).getTime()/1000), // convert to timestamp
+		local: Number(this.form.local),
+		foreign: Number(this.form.foreign),
+		code: this.form.code
+	    } as OrderData;
+	    let vm = this;
+	    $.post({
+		url: "/api/add",
+		data: JSON.stringify(data),
+		processData: false,
+		contentType: "text/plain; charset=UTF-8",
+		dataType: "json"
+	    }).done(() => {
+		vm.orders.push(data);
+	    });
 	}
     },
     ready: function() {

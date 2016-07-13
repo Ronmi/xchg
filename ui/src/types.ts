@@ -1,5 +1,5 @@
 export interface OrderData {
-    when: string;
+    when: number;
     local: number;
     foreign: number;
     code: string;

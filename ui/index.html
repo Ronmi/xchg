@@ -11,7 +11,7 @@
   <body>
     <div id="app">
       <div class="insert">
-	<form action="#">
+	<form action="#" onsubmit="return false">
 	  <fieldset>
 	    <legend>新增</legend>
 	    <label for="date">
@@ -36,7 +36,7 @@
 		</select>
 	      </label>
 	    </div>
-	    <button>送出</button>
+	    <button @click="addOrder">送出</button>
 	  </fieldset>
 	</form>
       </div>
