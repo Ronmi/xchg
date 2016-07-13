@@ -5,6 +5,7 @@
     <title>外匯交易小幫手</title>
     <link href="css/normalize.css" rel="stylesheet"/>
     <link href="css/main.css" rel="stylesheet"/>
+    <script src="node_modules/vue/dist/vue.js"></script>
   </head>
   <body>
     <div id="app">
@@ -14,20 +15,20 @@
 	    <legend>新增</legend>
 	    <label for="date">
 	      <span>交易時間</span>
-	      <input name="date" type="datetime"/>
+	      <input name="date" type="datetime" v-model="when"/>
 	    </label>
 	    <label for="local">
 	      <span>成本(買入為負)</span>
-	      <input name="local" type="number" step="0.01"/>
+	      <input name="local" type="number" step="0.01" v-model="local"/>
 	    </label>
 	    <div class="foreign">
 	      <label for="foreign">
 		<span>金額(買入為正)</span>
-		<input name="foreign" type="number" step="0.01"/>
+		<input name="foreign" type="number" step="0.01" v-model="foreign"/>
 	      </label>
 	      <label for="currency">
 		<span>幣別</span>
-		<select name="currency">
+		<select name="currency" v-model="currency">
 		  <option value="USD">美元</option>
 		  <option value="JPY">日圓</option>
 		  <option value="EUR">歐元</option>
@@ -51,27 +52,13 @@
 	      <th>匯率</th>
 	    </tr>
 	  </thead>
-	  <tbody>
-	    <tr>
-	      <td class="time">2016-7-12 12:34:56</td>
-	      <td class="currency">美元</td>
-	      <td class="foreign">100</td>
-	      <td class="local">-3300</td>
-	      <td class="rate">33.0000</td>
-	    </tr>
-	    <tr>
-	      <td class="time">2016-7-12 12:34:57</td>
-	      <td class="currency">美元</td>
-	      <td class="foreign">-50</td>
-	      <td class="local">1700</td>
-	      <td class="rate">34.0000</td>
-	    </tr>
-	    <tr>
-	      <td class="time">2016-7-12 12:34:58</td>
-	      <td class="currency">日圓</td>
-	      <td class="foreign">10000</td>
-	      <td class="local">-3333</td>
-	      <td class="rate">0.3333</td>
+	  <tbody v-cloak>
+	    <tr v-for="order of orders" track-by="time" transition="fade">
+	      <td class="time">{{order.when}}</td>
+	      <td class="currency">{{order.code}}</td>
+	      <td class="foreign" :class="{'negative': isForeignNeg">{{order.foreign | floatFormat 2}}</td>
+	      <td class="local" :class="{'negative': isLocalNeg">{{order.local | floatFormat 2}}</td>
+	      <td class="rate">{{order.local/order.foreign | floatFormat 4}}</td>
 	    </tr>
 	  </tbody>
 	</table>
