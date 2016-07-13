@@ -1,9 +1,9 @@
-import {OrderData} from "./types";
+import {OrderData, T} from "./types";
 
 const template = `
 <div class="list">
   <table cellspacing="0">
-    <caption>交易記錄</caption>
+    <caption>{{translate(orderType)}}交易記錄</caption>
     <thead>
       <tr>
         <th>交易時間</th>
@@ -28,8 +28,15 @@ const template = `
 
 Vue.component("order-list", {
     template: template,
-    props: ["orders"],
+    props: ["orderType", "orders"],
     methods: {
+	translate: function(code:string):string {
+	    if (code === "") {
+		return "";
+	    }
+
+	    return T[code];
+	},
 	isNegClass: function (val:number):string {
 	    if (val < 0) {
 		return 'negative';
@@ -43,7 +50,7 @@ Vue.component("order-list", {
 	},
 	convertTime: function(t:number):string {
 	    let d = new Date(t*1000)
-	    let ret = d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate();
+	    let ret = d.getFullYear() + '/' + (d.getMonth()+1) + '/' + d.getDate();
 	    ret += ' ' + this.formatTime(d.getHours());
 	    ret += ':' + this.formatTime(d.getMinutes());
 	    ret += ':' + this.formatTime(d.getSeconds());

@@ -32,7 +32,8 @@ let vm = new Vue({
 	    foreign: 0,
 	    code: 'USD'
 	},
-	orders: [] as OrderData[]
+	orders: [] as OrderData[],
+	orderType: ""
     },
     methods: {
 	sortOrders: function() {
@@ -41,19 +42,38 @@ let vm = new Vue({
 	    });
 	},
 	getOrders: function() {
+	    if (this.orderType === "") {
+		this.getAllOrders();
+		return;
+	    }
+
+	    $.post({
+		url: "/api/list",
+		data: JSON.stringify({code: this.orderType}),
+		processData: false,
+		contentType: "text/plain",
+		dataType: "json"
+	    }).done((data:any) => {
+		console.log(data);
+		this.$data.orders = data as OrderData[];
+		this.sortOrders();
+	    });
+	},
+	getAllOrders: function() {
 	    let vm = this;
 	    $.getJSON("/api/listall", {}, (data:any, status:string, xhr:JQueryXHR) => {
-		this.$data.orders = data as OrderData[];
+		this.orders = data as OrderData[];
 		vm.sortOrders();
 	    })
 	},
 	validateForm: function():OrderData {
-	    let d:Date;
+	    let d:number;
 	    try {
-		d = new Date(this.form.when);
+		d = Date.parse(this.form.when);
 	    } catch (e) {
 		return null;
 	    }
+	    console.log(this.form.when + " is " + d);
 
 	    let v = this.form.local*this.form.foreign;
 	    if (v >= 0) {
@@ -65,7 +85,7 @@ let vm = new Vue({
 	    }
 
 	    return {
-		when: Math.floor(d.getTime()/1000),
+		when: Math.floor(d/1000),
 		local: Number(this.form.local),
 		foreign: Number(this.form.foreign),
 		code: this.form.code
@@ -85,8 +105,10 @@ let vm = new Vue({
 		contentType: "text/plain; charset=UTF-8",
 		dataType: "json"
 	    }).done(() => {
-		vm.orders.push(data);
-		vm.sortOrders();
+		if (vm.orderType == data.code) {
+		    vm.orders.push(data);
+		    vm.sortOrders();
+		}
 	    });
 	}
     },
