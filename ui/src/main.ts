@@ -35,9 +35,16 @@ let vm = new Vue({
 	orders: [] as OrderData[]
     },
     methods: {
+	sortOrders: function() {
+	    this.orders.sort(function(a:OrderData, b:OrderData) {
+		return a.when - b.when;
+	    });
+	},
 	getOrders: function() {
+	    let vm = this;
 	    $.getJSON("/api/listall", {}, (data:any, status:string, xhr:JQueryXHR) => {
 		this.$data.orders = data as OrderData[];
+		vm.sortOrders();
 	    })
 	},
 	addOrder: function() {
@@ -56,6 +63,7 @@ let vm = new Vue({
 		dataType: "json"
 	    }).done(() => {
 		vm.orders.push(data);
+		vm.sortOrders();
 	    });
 	}
     },
