@@ -22,6 +22,11 @@ const template = `
         <td class="rate">{{-(order.local/order.foreign) | floatFormat 4}}</td>
       </tr>
     </tbody>
+    <tfoot v-show="rate[0] > 0 && rate[1] > 0">
+      <tr>
+        <td colspan="5">持有量及平均匯率: {{rate[0]}} / {{rate[1] | floatFormat 4}}</td>
+      </tr>
+    </tfoot>
   </table>
 </div>
 `;
@@ -29,6 +34,28 @@ const template = `
 Vue.component("order-list", {
     template: template,
     props: ["orderType", "orders"],
+    computed: {
+	rate: function():number[] {
+	    // 全部列表時總持有量和持有平均匯率是沒有意義的
+	    if (this.orderType === "") {
+		return [0, 0];
+	    }
+	    
+	    let total = 0;
+	    let rate = 0;
+
+	    for (let o of this.orders) {
+		if (o.local < 0) {
+		    // 只計算買外幣的部份，因為外幣脫手時不會影響持有平均匯率
+		    rate = (total * rate - o.local) / (total + o.foreign)
+		}
+		
+		total += o.foreign;
+	    }
+
+	    return [total, rate];
+	}
+    },
     methods: {
 	translate: function(code:string):string {
 	    if (code === "") {
