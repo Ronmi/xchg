@@ -4,9 +4,16 @@
   "description": "ui for xchg",
   "main": "js/bundle.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "postinstall": "typings install",
+    "typings": "typings",
+    "tsc": "tsc",
+    "tsc:w": "tsc -w",
+    "webpack": "webpack",
+    "webpack:w": "webpack -w",
+    "lite": "lite-server",
+    "start": "tsc && webpack && concurrently \"npm run tsc:w\" \"npm run webpack:w\" \"npm run lite\""
   },
-  "author": "",
+  "author": "Ronmi Ren <ronmi.ren@gmail.com>",
   "license": "GPL-3.0",
   "dependencies": {
     "vue": "^1.0.26"
