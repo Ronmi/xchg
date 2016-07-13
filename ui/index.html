@@ -15,24 +15,23 @@
 	    <legend>新增</legend>
 	    <label for="date">
 	      <span>交易時間</span>
-	      <input name="date" type="datetime" v-model="when"/>
+	      <input name="date" type="datetime" v-model="form.when"/>
 	    </label>
 	    <label for="local">
 	      <span>成本(買入為負)</span>
-	      <input name="local" type="number" step="0.01" v-model="local"/>
+	      <input name="local" type="number" step="0.01" v-model="form.local"/>
 	    </label>
 	    <div class="foreign">
 	      <label for="foreign">
 		<span>金額(買入為正)</span>
-		<input name="foreign" type="number" step="0.01" v-model="foreign"/>
+		<input name="foreign" type="number" step="0.01" v-model="form.foreign"/>
 	      </label>
 	      <label for="currency">
 		<span>幣別</span>
-		<select name="currency" v-model="currency">
-		  <option value="USD">美元</option>
-		  <option value="JPY">日圓</option>
-		  <option value="EUR">歐元</option>
-		  <option value="AUD">澳幣</option>
+		<select name="currency" v-model="form.code">
+		  <template v-for="(code, name) in T">
+		    <option :value="code">{{name}}</option>
+		  </template>
 		</select>
 	      </label>
 	    </div>
@@ -53,16 +52,17 @@
 	    </tr>
 	  </thead>
 	  <tbody v-cloak>
-	    <tr v-for="order of orders" track-by="time" transition="fade">
+	    <tr v-for="order of orders" track-by="when" transition="fade">
 	      <td class="time">{{order.when}}</td>
-	      <td class="currency">{{order.code}}</td>
-	      <td class="foreign" :class="{'negative': isForeignNeg">{{order.foreign | floatFormat 2}}</td>
-	      <td class="local" :class="{'negative': isLocalNeg">{{order.local | floatFormat 2}}</td>
-	      <td class="rate">{{order.local/order.foreign | floatFormat 4}}</td>
+	      <td class="currency">{{order.code | translate}}</td>
+	      <td class="foreign" :class="isNegClass(order.foreign)">{{order.foreign | floatFormat 2}}</td>
+	      <td class="local" :class="isNegClass(order.local)">{{order.local | floatFormat 2}}</td>
+	      <td class="rate">{{-(order.local/order.foreign) | floatFormat 4}}</td>
 	    </tr>
 	  </tbody>
 	</table>
       </div>
     </div>
+    <script src="js/bundle.js"></script>
   </body>
 </html>

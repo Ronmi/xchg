@@ -3,6 +3,10 @@
     margin: 5px auto;
 }
 
+.negative {
+    color: red;
+}
+
 div.insert {
     margin-bottom: 1.1em;
 }
