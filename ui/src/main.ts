@@ -1,18 +1,4 @@
-
-interface OrderData {
-    when: string;
-    local: number;
-    foreign: number;
-    code: string;
-}
-
-// supported foreign currency code and translations
-const T = {
-    "JPY": "日圓",
-    "USD": "美元",
-    "EUR": "歐元",
-    "AUD": "澳幣"
-}
+import {OrderData, T} from "./types";
 
 Vue.filter('floatFormat', (val:number, size:number): string => {
     size = Math.floor(Math.abs(size));
