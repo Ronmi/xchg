@@ -47,13 +47,36 @@ let vm = new Vue({
 		vm.sortOrders();
 	    })
 	},
-	addOrder: function() {
-	    let data = {
-		when: Math.floor((new Date(this.form.when)).getTime()/1000), // convert to timestamp
+	validateForm: function():OrderData {
+	    let d:Date;
+	    try {
+		d = new Date(this.form.when);
+	    } catch (e) {
+		return null;
+	    }
+
+	    let v = this.form.local*this.form.foreign;
+	    if (v >= 0) {
+		return null;
+	    }
+
+	    if (!T[this.form.code]) {
+		return null;
+	    }
+
+	    return {
+		when: Math.floor(d.getTime()/1000),
 		local: Number(this.form.local),
 		foreign: Number(this.form.foreign),
 		code: this.form.code
-	    } as OrderData;
+	    }
+	},
+	addOrder: function() {
+	    let data = this.validateForm();
+	    if (data == null) {
+		alert("格式錯誤"); // alert, 爛透惹ㄦ
+		return;
+	    }
 	    let vm = this;
 	    $.post({
 		url: "/api/add",
