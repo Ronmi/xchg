@@ -15,7 +15,7 @@ const template = `
     </thead>
     <tbody v-cloak>
       <tr v-for="order of orders" track-by="when" transition="fade">
-        <td class="time">{{order.when}}</td>
+        <td class="time">{{convertTime(order.when)}}</td>
         <td class="currency">{{order.code | translate}}</td>
         <td class="foreign" :class="isNegClass(order.foreign)">{{order.foreign | floatFormat 2}}</td>
         <td class="local" :class="isNegClass(order.local)">{{order.local | floatFormat 2}}</td>
@@ -30,10 +30,24 @@ Vue.component("order-list", {
     template: template,
     props: ["orders"],
     methods: {
-	isNegClass: (val:number):string => {
+	isNegClass: function (val:number):string {
 	    if (val < 0) {
 		return 'negative';
 	    }
+	},
+	formatTime: function (t:number):string {
+	    if (t < 10) {
+		return '0' + t;
+	    }
+	    return String(t);
+	},
+	convertTime: function(t:number):string {
+	    let d = new Date(t*1000)
+	    let ret = d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate();
+	    ret += ' ' + this.formatTime(d.getHours());
+	    ret += ':' + this.formatTime(d.getMinutes());
+	    ret += ':' + this.formatTime(d.getSeconds());
+	    return ret;
 	}
     }
 });
