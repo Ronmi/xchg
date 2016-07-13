@@ -27,30 +27,22 @@ let vm = new Vue({
     data:{
  	T: T,
 	form: <OrderData>{
-	    when: '2016-07-13 01:23:45',
-	    local: -3300,
-	    foreign: 100,
+	    when: '',
+	    local: 0,
+	    foreign: 0,
 	    code: 'USD'
 	},
-	orders: [
-	    {
-		when: '2016-07-13 01:23:45',
-		local: -3300,
-		foreign: 100,
-		code: 'USD'
-	    },
-	    {
-		when: '2016-07-13 01:23:46',
-		local: 3300,
-		foreign: -100,
-		code: 'USD'
-	    },
-	    {
-		when: '2016-07-13 01:23:47',
-		local: -315,
-		foreign: 1000,
-		code: 'JPY'
-	    },
-	]
+	orders: [] as OrderData[]
+    },
+    methods: {
+	getOrders: function() {
+	    $.getJSON("/api/listall", {}, (data:any, status:string, xhr:JQueryXHR) => {
+		console.log(this);
+		this.$data.orders = data as OrderData[];
+	    })
+	}
+    },
+    ready: function() {
+	this.getOrders();
     }
 });
