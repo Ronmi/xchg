@@ -1,4 +1,5 @@
 import {OrderData, T} from "./types";
+import "./orderlist.ts";
 
 Vue.filter('floatFormat', (val:number, size:number): string => {
     size = Math.floor(Math.abs(size));
@@ -51,12 +52,5 @@ let vm = new Vue({
 		code: 'JPY'
 	    },
 	]
-    },
-    methods: {
-	isNegClass: (val:number):string => {
-	    if (val < 0) {
-		return 'negative';
-	    }
-	}
     }
 });
