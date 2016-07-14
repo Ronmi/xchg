@@ -39,3 +39,9 @@
 ### @c9s
 
 別讀了，直接送 PR 來吧 <3
+
+
+# 安裝
+
+    go get github.com/Ronmi/xchg/cmd/xchg
+    xchg --ui $(go list -f "{{.Dir}}" github.com/Ronmi/xchg/cmd/xchg)/../../ui
