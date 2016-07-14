@@ -1,60 +1,41 @@
 [![Build Status](https://travis-ci.org/Ronmi/xchg.svg?branch=master)](https://travis-ci.org/Ronmi/xchg)
 
-一個用來練習 `go`/`typescript`/`vuejs` 的小專案，開發歷程詳見 git commit log
+雖然是 code walk，但這東西我真的有在用XD
 
-# API 規格
+# Code walk
 
-- 所有錯誤都會回傳 json 格式錯誤訊息 `"error message"`
-- 伺服器錯誤回傳 `500 Internal Server Error`
-- 參數錯誤回傳 `400 Bad Request`
-- 資料不存在回傳 `404 Not Found`
-- 正常回傳 `200 OK`
+從舊到新，一個一個 commit 看它的 log message 和 diff，應該可以理解我的開發思路；別忘了開個分支出來執行和修改看看。
 
-回傳值都一定是 json 格式，錯誤訊息是 json string `"error message"`，正常資料則是 json object `{key:value pairs}`
+# 源起
 
-沒有回傳值的 API 代表它會回傳 `null`，這種狀況只要檢查 http status code 就可以。
+一開始只是想摸看看 typescript 和 vuejs，所以想找個小東西試試手感。寫到一半的時候想到：對一些新手而言，學會語法還是寫不出完整的程式來。我認為這是因為沒有語感，就好像背了一堆英文單字，結果看到外國人還是說不出話來。語感是培養出來的，多聽多說自然會提昇。所以我決定把原專案砍掉重練，記錄每一階段的開發思路，希望能讓中、新手可以多一個參考。
 
-# 資料結構 - Order
+# 適合閱讀這個專案的人
 
-Order 物件由以下四個欄位組成，通通都是必要欄位
+### 對 go 有基本理解的人
 
-- `code`: 三碼英文貨幣代碼，不分大小寫，但伺服器回傳的一定是大寫。
-- `when`: 交易時間的 timestamp。
-- `foreign`: 外幣資產的變動，買入外幣為正，賣出為負。
-- `local`: 本地貨幣資產的變動，買入外幣為負，賣出為正。
+這個專案裡用到了 sql database/http server/json，所以你得先對這幾個 package 裡的 API 有基本理解。
 
-# API 列表
+此外還有 jsonapi/sdm 都是我自己的 toy project，一個是仿 http package 但 handler 是 json stream；一個是讓 sql 可以直接 scan 給 struct。這兩個 package 的 API 都十分接近對應的官方套件，應該不妨礙理解思路才對。
 
-## /api/listall
+### 想學習 typescript 的人
 
-一次列出所有交易資料
+基本上我也剛開始學，所以這部份除了思路之外沒有什麼參考價值：我的 js 部份完全沒有按照 best practice 走；自己亂搞踩地雷是我比較習慣的自學方式。所以同是新手，互相交流一下也不錯。
 
-### 回傳值
+### open-minded FLOSS people
 
-`[Order object, Order object, ...]`
+心態正確做什麼都方便
 
-沒有資料不會回傳 404，而是回傳空陣列。
+# 不適合閱讀這個的人
 
-## /api/list
+### 語法還看不太懂的人
 
-列出特定外幣的所有交易資料
+要學習語感之前，你得先背夠單字。
 
-### 參數
+### 還沒讀過「提問的藝術」的人
 
-`{code: "currency code"}`
+還不快去讀！ [ihower 翻譯版](https://ihower.tw/blog/archives/457)
 
-`code` 必須是三碼英文，不分大小寫。
+### @c9s
 
-### 回傳值
-
-`[Order, Order, ...]`
-
-沒有資料不會回傳 404，而是回傳空陣列。
-
-## /api/add
-
-新增一筆交易資料
-
-### 參數
-
-`Order object`
+別讀了，直接送 PR 來吧 <3
