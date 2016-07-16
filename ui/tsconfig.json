@@ -1,13 +1,15 @@
 {
-    "compilerOptions": {
-	"module": "commonjs",
-	"target": "es5",
-	"noImplicitAny": true,
-	"removeComments": true,
-	"sourceMap": true,
-	"outDir": "js/"
-    },
-    "excludes": [
-	"node_modules"
-    ]
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "noImplicitAny": true,
+    "removeComments": true,
+    "sourceMap": true,
+    "jsx": "react",
+    "reactNamespace": "JSX",
+    "outDir": "js/"
+  },
+  "exclude": [
+    "node_modules"
+  ]
 }
