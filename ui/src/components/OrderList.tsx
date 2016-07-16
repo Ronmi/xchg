@@ -1,5 +1,5 @@
-import { OrderData, T } from "./types";
-import * as JSX from "./jsx";
+import { OrderData, T } from "../types";
+import * as JSX from "../jsx";
 import {VueComponent, Prop} from "vue-typescript";
 
 @VueComponent({

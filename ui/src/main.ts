@@ -1,5 +1,5 @@
 import { OrderData, T } from "./types";
-import "./orderlist";
+import "./components/OrderList";
 import "./jsxdef";
 
 Vue.filter("floatFormat", (val: number, size: number): string => {
