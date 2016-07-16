@@ -56,7 +56,6 @@ let vm = new Vue({
                 contentType: "text/plain",
                 dataType: "json"
             }).done((data: any) => {
-                console.log(data);
                 this.$data.orders = data as OrderData[];
                 this.sortOrders();
             });
