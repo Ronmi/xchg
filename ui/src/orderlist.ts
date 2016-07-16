@@ -1,4 +1,4 @@
-import {OrderData, T} from "./types";
+import { OrderData, T } from "./types";
 
 const template = `
 <div class="list">
@@ -35,53 +35,53 @@ Vue.component("order-list", {
     template: template,
     props: ["orderType", "orders"],
     computed: {
-	rate: function():number[] {
-	    // 全部列表時總持有量和持有平均匯率是沒有意義的
-	    if (this.orderType === "") {
-		return [0, 0];
-	    }
-	    
-	    let total = 0;
-	    let rate = 0;
+        rate: function(): number[] {
+            // 全部列表時總持有量和持有平均匯率是沒有意義的
+            if (this.orderType === "") {
+                return [0, 0];
+            }
 
-	    for (let o of this.orders) {
-		if (o.local < 0) {
-		    // 只計算買外幣的部份，因為外幣脫手時不會影響持有平均匯率
-		    rate = (total * rate - o.local) / (total + o.foreign)
-		}
-		
-		total += o.foreign;
-	    }
+            let total = 0;
+            let rate = 0;
 
-	    return [total, rate];
-	}
+            for (let o of this.orders) {
+                if (o.local < 0) {
+                    // 只計算買外幣的部份，因為外幣脫手時不會影響持有平均匯率
+                    rate = (total * rate - o.local) / (total + o.foreign);
+                }
+
+                total += o.foreign;
+            }
+
+            return [total, rate];
+        }
     },
     methods: {
-	translate: function(code:string):string {
-	    if (code === "") {
-		return "";
-	    }
+        translate: function(code: string): string {
+            if (code === "") {
+                return "";
+            }
 
-	    return T[code];
-	},
-	isNegClass: function (val:number):string {
-	    if (val < 0) {
-		return 'negative';
-	    }
-	},
-	formatTime: function (t:number):string {
-	    if (t < 10) {
-		return '0' + t;
-	    }
-	    return String(t);
-	},
-	convertTime: function(t:number):string {
-	    let d = new Date(t*1000)
-	    let ret = d.getFullYear() + '/' + (d.getMonth()+1) + '/' + d.getDate();
-	    ret += ' ' + this.formatTime(d.getHours());
-	    ret += ':' + this.formatTime(d.getMinutes());
-	    ret += ':' + this.formatTime(d.getSeconds());
-	    return ret;
-	}
+            return T[code];
+        },
+        isNegClass: function(val: number): string {
+            if (val < 0) {
+                return "negative";
+            }
+        },
+        formatTime: function(t: number): string {
+            if (t < 10) {
+                return "0" + t;
+            }
+            return String(t);
+        },
+        convertTime: function(t: number): string {
+            let d = new Date(t * 1000);
+            let ret = d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate();
+            ret += " " + this.formatTime(d.getHours());
+            ret += ":" + this.formatTime(d.getMinutes());
+            ret += ":" + this.formatTime(d.getSeconds());
+            return ret;
+        }
     }
 });

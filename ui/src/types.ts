@@ -11,5 +11,4 @@ export const T = {
     "USD": "美元",
     "EUR": "歐元",
     "AUD": "澳幣"
-} as {[prop:string]:string}
-
+} as { [prop: string]: string };
