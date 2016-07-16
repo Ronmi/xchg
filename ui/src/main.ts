@@ -1,5 +1,6 @@
 import { OrderData, T } from "./types";
-import "./orderlist.ts";
+import "./orderlist";
+import "./jsxdef";
 
 Vue.filter("floatFormat", (val: number, size: number): string => {
     size = Math.floor(Math.abs(size));

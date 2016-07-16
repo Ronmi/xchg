@@ -1,38 +1,37 @@
 import { OrderData, T } from "./types";
-
-const template = `
-<div class="list">
-  <table cellspacing="0">
-    <caption>{{translate(orderType)}}交易記錄</caption>
-    <thead>
-      <tr>
-        <th>交易時間</th>
-        <th>幣別</th>
-        <th>金額</th>
-        <th>成本</th>
-        <th>匯率</th>
-      </tr>
-    </thead>
-    <tbody v-cloak>
-      <tr v-for="order of orders" track-by="when" transition="fade">
-        <td class="time">{{convertTime(order.when)}}</td>
-        <td class="currency">{{order.code | translate}}</td>
-        <td class="foreign" :class="isNegClass(order.foreign)">{{order.foreign | floatFormat 2}}</td>
-        <td class="local" :class="isNegClass(order.local)">{{order.local | floatFormat 2}}</td>
-        <td class="rate">{{-(order.local/order.foreign) | floatFormat 4}}</td>
-      </tr>
-    </tbody>
-    <tfoot v-show="rate[0] > 0 && rate[1] > 0">
-      <tr>
-        <td colspan="5">持有量及平均匯率: {{rate[0]}} / {{rate[1] | floatFormat 4}}</td>
-      </tr>
-    </tfoot>
-  </table>
-</div>
-`;
+import * as JSX from "./jsx";
 
 Vue.component("order-list", {
-    template: template,
+    template: (
+        <div class="list">
+            <table cellspacing="0">
+                <caption>{`{{translate(orderType)}}`}交易記錄</caption>
+                <thead>
+                    <tr>
+                        <th>交易時間</th>
+                        <th>幣別</th>
+                        <th>金額</th>
+                        <th>成本</th>
+                        <th>匯率</th>
+                    </tr>
+                </thead>
+                <tbody v-cloak>
+                    <tr v-for="order of orders" track-by="when" transition="fade">
+                        <td class="time">{`{{convertTime(order.when)}}`}</td>
+                        <td class="currency">{`{{order.code | translate}}`}</td>
+                        <td class="foreign" vbind_class="isNegClass(order.foreign)">{`{{order.foreign | floatFormat 2}}`}</td>
+                        <td class="local" vbind_class="isNegClass(order.local)">{`{{order.local | floatFormat 2}}`}</td>
+                        <td class="rate">{`{{-(order.local/order.foreign) | floatFormat 4}}`}</td>
+                    </tr>
+                </tbody>
+                <tfoot v-show="rate[0] > 0 && rate[1] > 0">
+                    <tr>
+                        <td colspan="5">持有量及平均匯率: {`{{rate[0]}}`} / {`{{rate[1] | floatFormat 4}}`}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    ),
     props: ["orderType", "orders"],
     computed: {
         rate: function(): number[] {
@@ -84,4 +83,4 @@ Vue.component("order-list", {
             return ret;
         }
     }
-});
+                });
