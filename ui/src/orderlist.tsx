@@ -1,7 +1,8 @@
 import { OrderData, T } from "./types";
 import * as JSX from "./jsx";
+import {VueComponent, Prop} from "vue-typescript";
 
-Vue.component("order-list", {
+@VueComponent({
     template: (
         <div class="list">
             <table cellspacing="0">
@@ -31,56 +32,58 @@ Vue.component("order-list", {
                 </tfoot>
             </table>
         </div>
-    ),
-    props: ["orderType", "orders"],
-    computed: {
-        rate: function(): number[] {
-            // 全部列表時總持有量和持有平均匯率是沒有意義的
-            if (this.orderType === "") {
-                return [0, 0];
-            }
+    )
+})
+class OrderList {
+    @Prop orderType:string
+    @Prop orders:OrderData[]
 
-            let total = 0;
-            let rate = 0;
-
-            for (let o of this.orders) {
-                if (o.local < 0) {
-                    // 只計算買外幣的部份，因為外幣脫手時不會影響持有平均匯率
-                    rate = (total * rate - o.local) / (total + o.foreign);
-                }
-
-                total += o.foreign;
-            }
-
-            return [total, rate];
+    get rate(): number[] {
+        // 全部列表時總持有量和持有平均匯率是沒有意義的
+        if (this.orderType === "") {
+            return [0, 0];
         }
-    },
-    methods: {
-        translate: function(code: string): string {
-            if (code === "") {
-                return "";
+
+        let total = 0;
+        let rate = 0;
+
+        for (let o of this.orders) {
+            if (o.local < 0) {
+                // 只計算買外幣的部份，因為外幣脫手時不會影響持有平均匯率
+                rate = (total * rate - o.local) / (total + o.foreign);
             }
 
-            return T[code];
-        },
-        isNegClass: function(val: number): string {
-            if (val < 0) {
-                return "negative";
-            }
-        },
-        formatTime: function(t: number): string {
-            if (t < 10) {
-                return "0" + t;
-            }
-            return String(t);
-        },
-        convertTime: function(t: number): string {
-            let d = new Date(t * 1000);
-            let ret = d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate();
-            ret += " " + this.formatTime(d.getHours());
-            ret += ":" + this.formatTime(d.getMinutes());
-            ret += ":" + this.formatTime(d.getSeconds());
-            return ret;
+            total += o.foreign;
+        }
+
+        return [total, rate];
+    }
+
+    translate(code: string): string {
+        if (code === "") {
+            return "";
+        }
+
+        return T[code];
+    }
+
+    isNegClass(val: number): string {
+        if (val < 0) {
+            return "negative";
         }
     }
-                });
+    formatTime(t: number): string {
+        if (t < 10) {
+            return "0" + t;
+        }
+        return String(t);
+    }
+    convertTime(t: number): string {
+        let d = new Date(t * 1000);
+        let ret = d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate();
+        ret += " " + this.formatTime(d.getHours());
+        ret += ":" + this.formatTime(d.getMinutes());
+        ret += ":" + this.formatTime(d.getSeconds());
+        return ret;
+    }
+}

@@ -5,6 +5,7 @@
     "noImplicitAny": true,
     "removeComments": true,
     "sourceMap": true,
+    "experimentalDecorators": true,
     "jsx": "react",
     "reactNamespace": "JSX",
     "outDir": "js/"
