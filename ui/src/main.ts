@@ -1,5 +1,6 @@
 import { OrderData, T } from "./types";
 import "./components/OrderList";
+import "./components/OrderForm";
 import "./jsxdef";
 
 Vue.filter("floatFormat", (val: number, size: number): string => {
@@ -67,53 +68,26 @@ let vm = new Vue({
                 vm.sortOrders();
             });
         },
-        validateForm: function(): OrderData {
-            let d: number;
-            try {
-                d = Date.parse(this.form.when);
-            } catch (e) {
-                return null;
+        addOrder: function(data: OrderData) {
+            if (this.orderType === data.code) {
+                this.orders.push(data);
+                this.sortOrders();
             }
-            console.log(this.form.when + " is " + d);
-
-            let v = this.form.local * this.form.foreign;
-            if (v >= 0) {
-                return null;
-            }
-
-            if (!T[this.form.code]) {
-                return null;
-            }
-
-            return {
-                when: Math.floor(d / 1000),
-                local: Number(this.form.local),
-                foreign: Number(this.form.foreign),
-                code: this.form.code
-            };
-        },
-        addOrder: function() {
-            let data = this.validateForm();
-            if (data == null) {
-                alert("格式錯誤"); // alert, 爛透惹ㄦ
-                return;
-            }
-            let vm = this;
-            $.post({
-                url: "/api/add",
-                data: JSON.stringify(data),
-                processData: false,
-                contentType: "text/plain; charset=UTF-8",
-                dataType: "json"
-            }).done(() => {
-                if (vm.orderType === data.code) {
-                    vm.orders.push(data);
-                    vm.sortOrders();
-                }
-            });
         }
     },
     ready: function() {
         this.getOrders();
     }
+});
+
+vm.$on("formSubmited", function(d: OrderData) {
+    $.post({
+        url: "/api/add",
+        data: JSON.stringify(d),
+        processData: false,
+        contentType: "text/plain; charset=UTF-8",
+        dataType: "json"
+    }).done(() => {
+        this.addOrder(d);
+    });
 });

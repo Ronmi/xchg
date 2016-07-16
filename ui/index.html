@@ -10,36 +10,7 @@
   </head>
   <body>
     <div id="app">
-      <div class="insert">
-	<form action="#" onsubmit="return false">
-	  <fieldset>
-	    <legend>新增</legend>
-	    <label for="date">
-	      <span>交易時間</span>
-	      <input name="date" type="datetime" v-model="form.when" placeholder="年/月/日 時:分:秒"/>
-	    </label>
-	    <label for="local">
-	      <span>成本(買入為負)</span>
-	      <input name="local" type="number" step="0.01" v-model="form.local"/>
-	    </label>
-	    <div class="foreign">
-	      <label for="foreign">
-		<span>金額(買入為正)</span>
-		<input name="foreign" type="number" step="0.01" v-model="form.foreign"/>
-	      </label>
-	      <label for="currency">
-		<span>幣別</span>
-		<select name="currency" v-model="form.code">
-		  <template v-for="(code, name) in T">
-		    <option :value="code">{{name}}</option>
-		  </template>
-		</select>
-	      </label>
-	    </div>
-	    <button @click="addOrder">送出</button>
-	  </fieldset>
-	</form>
-      </div>
+      <order-form></order-form>
       <select v-model="orderType" @change="getOrders()" class="list-type">
 	<option value="">全部</option>
 	<template v-for="(code, name) in T">
