@@ -43,7 +43,7 @@ func (h *add) Handle(enc *json.Encoder, dec *json.Decoder, httpData *jsonapi.HTT
 		return
 	}
 
-	if _, err := h.M.Insert("orders", param); err != nil {
+	if _, err := h.M.Insert("orders", data); err != nil {
 		httpData.WriteHeader(http.StatusInternalServerError)
 		enc.Encode(fmt.Sprintf("Error saving order: %s", err))
 		return
