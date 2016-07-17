@@ -79,7 +79,7 @@ let vm = new Vue({
     }
 });
 
-vm.$on("formSubmited", function(d: OrderData) {
+vm.$on("orderEntered", function(d: OrderData) {
     $.post({
         url: "/api/add",
         data: JSON.stringify(d),

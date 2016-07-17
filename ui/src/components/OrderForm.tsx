@@ -84,6 +84,6 @@ class OrderForm extends Vue {
             return;
         }
 
-        this.$dispatch("formSubmited", data);
+        this.$dispatch("orderEntered", data);
     }
 }
