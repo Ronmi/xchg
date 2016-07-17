@@ -21,9 +21,27 @@ Order 物件由以下四個欄位組成，通通都是必要欄位
 
 # API 列表
 
+## /api/auth
+
+使用者認證，並取回 token
+
+### 參數
+
+`{pin: "6 digit string"}`
+
+`pin` 碼必須是 6 個數字
+
+### 回傳值
+
+成功的話傳回 token 字串，密碼錯誤則是 400 Bad Request
+
 ## /api/listall
 
 一次列出所有交易資料
+
+### 參數
+
+`{token: "token string"}`
 
 ### 回傳值
 
@@ -37,7 +55,7 @@ Order 物件由以下四個欄位組成，通通都是必要欄位
 
 ### 參數
 
-`{code: "currency code"}`
+`{code: "currency code", token: "token string"}`
 
 `code` 必須是三碼英文，不分大小寫。
 
@@ -53,4 +71,4 @@ Order 物件由以下四個欄位組成，通通都是必要欄位
 
 ### 參數
 
-`Order object`
+`{data: Order object, token: "token string"}`

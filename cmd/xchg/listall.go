@@ -11,9 +11,27 @@ import (
 
 type listall struct {
 	M *sdm.Manager
+	A Authenticator
 }
 
 func (h *listall) Handle(enc *json.Encoder, dec *json.Decoder, httpData *jsonapi.HTTP) {
+	type p struct {
+		Token string `json:"token"`
+	}
+
+	var param p
+	if err := dec.Decode(&param); err != nil {
+		httpData.WriteHeader(http.StatusBadRequest)
+		enc.Encode(fmt.Sprintf("Error decoding parameter: %s", err))
+		return
+	}
+
+	if !h.A.Valid(param.Token) {
+		httpData.WriteHeader(http.StatusForbidden)
+		enc.Encode("Invalid token")
+		return
+	}
+
 	qstr := `SELECT * FROM orders`
 	rows := h.M.Query(Order{}, qstr)
 
