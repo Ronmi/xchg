@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"strings"
 	"testing"
@@ -9,19 +10,29 @@ import (
 	"github.com/Patrolavia/jsonapi"
 )
 
+func makeList(preset []Order) (*list, string) {
+	mgr, err := initDB(preset)
+	if err != nil {
+		log.Fatalf("Cannot initial database: %s", err)
+	}
+	defer mgr.Connection().Close()
+	fake := FakeAuthenticator("123456")
+	token, _ := fake.Token("123456")
+	return &list{mgr, fake}, token
+}
+
 func TestList(t *testing.T) {
 	presetUSD := []Order{
 		Order{1468248039, 100, -100, "USD"},
 		Order{1468248040, -50, 51, "USD"},
 	}
-	mgr, err := initDB(presetUSD)
-	if err != nil {
-		t.Fatalf("Cannot initial database: %s", err)
-	}
-	defer mgr.Connection().Close()
-	h := &list{mgr}
+	h, token := makeList(presetUSD)
 
-	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/list", "", `{"code":"USD"}`)
+	resp, err := jsonapi.HandlerTest(h.Handle).Post(
+		"/api/list",
+		"",
+		`{"code":"USD","token":"`+token+`"}`,
+	)
 
 	if err != nil {
 		t.Fatalf("unexpected error occured when testing list: %s", err)
@@ -46,14 +57,9 @@ func TestList(t *testing.T) {
 }
 
 func TestListEmpty(t *testing.T) {
-	mgr, err := initDB([]Order{})
-	if err != nil {
-		t.Fatalf("Cannot initial database: %s", err)
-	}
-	defer mgr.Connection().Close()
-	h := &list{mgr}
+	h, token := makeList([]Order{})
 
-	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/list", "", `{"code":"NTD"}`)
+	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/list", "", `{"code":"NTD","token":"`+token+`"}`)
 
 	if err != nil {
 		t.Fatalf("unexpected error occured when testing list: %s", err)
@@ -72,39 +78,47 @@ func TestListEmpty(t *testing.T) {
 }
 
 func TestListNoData(t *testing.T) {
-	mgr, err := initDB([]Order{})
-	if err != nil {
-		t.Fatalf("Cannot initial database: %s", err)
-	}
-	defer mgr.Connection().Close()
-	h := &list{mgr}
+	h, token := makeList([]Order{})
 
-	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/add", "", `{}`)
+	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/list", "", `{"token":"`+token+`"}`)
 
 	if err != nil {
-		t.Fatalf("unexpected error occured when testing add: %s", err)
+		t.Fatalf("unexpected error occured when testing list: %s", err)
 	}
 
 	if resp.Code != http.StatusBadRequest {
-		t.Fatalf("unexpected status code %d for bas request: %s", resp.Code, resp.Body.String())
+		t.Fatalf("unexpected status code %d for bad request: %s", resp.Code, resp.Body.String())
 	}
 }
 
 func TestListNotJSON(t *testing.T) {
-	mgr, err := initDB([]Order{})
-	if err != nil {
-		t.Fatalf("Cannot initial database: %s", err)
-	}
-	defer mgr.Connection().Close()
-	h := &list{mgr}
+	h, _ := makeList([]Order{})
 
-	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/add", "", `1234`)
+	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/list", "", ``)
 
 	if err != nil {
-		t.Fatalf("unexpected error occured when testing add: %s", err)
+		t.Fatalf("unexpected error occured when testing list: %s", err)
 	}
 
 	if resp.Code != http.StatusBadRequest {
-		t.Fatalf("unexpected status code %d for bas request: %s", resp.Code, resp.Body.String())
+		t.Fatalf("unexpected status code %d for bad request: %s", resp.Code, resp.Body.String())
+	}
+}
+
+func TestListWrongToken(t *testing.T) {
+	h, token := makeList([]Order{})
+
+	resp, err := jsonapi.HandlerTest(h.Handle).Post(
+		"/api/list",
+		"",
+		`{"code":"USD","token":"1234"}`,
+	)
+
+	if err != nil {
+		t.Fatalf("unexpected error occured when testing list: %s", err)
+	}
+
+	if resp.Code != http.StatusForbidden {
+		t.Fatalf("unexpected status code %d for forbidden: %s", resp.Code, resp.Body.String())
 	}
 }

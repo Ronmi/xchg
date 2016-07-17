@@ -2,12 +2,24 @@ package main
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"strings"
 	"testing"
 
 	"github.com/Patrolavia/jsonapi"
 )
+
+func makeListAll(preset []Order) (*listall, string) {
+	mgr, err := initDB(preset)
+	if err != nil {
+		log.Fatalf("Cannot initial database: %s", err)
+	}
+	defer mgr.Connection().Close()
+	fake := FakeAuthenticator("123456")
+	token, _ := fake.Token("123456")
+	return &listall{mgr, fake}, token
+}
 
 func TestListAll(t *testing.T) {
 	presetData := []Order{
@@ -16,14 +28,9 @@ func TestListAll(t *testing.T) {
 		Order{1468248041, 100, -100, "JPY"},
 		Order{1468248042, -50, 51, "JPY"},
 	}
-	mgr, err := initDB(presetData)
-	if err != nil {
-		t.Fatalf("Cannot initial database: %s", err)
-	}
-	defer mgr.Connection().Close()
-	h := &listall{mgr}
+	h, token := makeListAll(presetData)
 
-	resp, err := jsonapi.HandlerTest(h.Handle).Get("/api/listall", "")
+	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/listall", "", `{"token":"`+token+`"}`)
 
 	if err != nil {
 		t.Fatalf("unexpected error occured when testing listall: %s", err)
@@ -48,15 +55,9 @@ func TestListAll(t *testing.T) {
 }
 
 func TestListAllEmpty(t *testing.T) {
-	mgr, err := initDB([]Order{})
-	if err != nil {
-		t.Fatalf("Cannot initial database: %s", err)
-	}
-	defer mgr.Connection().Close()
+	h, token := makeListAll([]Order{})
 
-	h := &listall{mgr}
-
-	resp, err := jsonapi.HandlerTest(h.Handle).Get("/api/listall", "")
+	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/listall", "", `{"token":"`+token+`"}`)
 
 	if err != nil {
 		t.Fatalf("unexpected error occured when testing listall: %s", err)
@@ -71,5 +72,33 @@ func TestListAllEmpty(t *testing.T) {
 	}
 	if str := strings.TrimSpace(resp.Body.String()); str != "[]" {
 		t.Errorf("listall: not returning empty array: '%s'", str)
+	}
+}
+
+func TestListAllNotJSON(t *testing.T) {
+	h, token := makeListAll([]Order{})
+
+	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/listall", "", `1234`)
+
+	if err != nil {
+		t.Fatalf("unexpected error occured when testing listall: %s", err)
+	}
+
+	if resp.Code != http.StatusBadRequest {
+		t.Fatalf("expected listall return bad request when not sending json, got %d: %s", resp.Code, resp.Body.String())
+	}
+}
+
+func TestListAllWrongToken(t *testing.T) {
+	h, token := makeListAll([]Order{})
+
+	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/listall", "", `{"token":"1234"}`)
+
+	if err != nil {
+		t.Fatalf("unexpected error occured when testing listall: %s", err)
+	}
+
+	if resp.Code != http.StatusForbidden {
+		t.Fatalf("expected listall return forbidden when wrong token, got %d: %s", resp.Code, resp.Body.String())
 	}
 }

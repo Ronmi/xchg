@@ -1,22 +1,35 @@
 package main
 
 import (
+	"log"
 	"net/http"
 	"strings"
 	"testing"
 
+	"git.ronmi.tw/ronmi/sdm"
+
 	"github.com/Patrolavia/jsonapi"
 )
 
-func TestAddOK(t *testing.T) {
-	mgr, err := initDB([]Order{})
+func makeAdd(preset []Order) (*add, string, *sdm.Manager) {
+	mgr, err := initDB(preset)
 	if err != nil {
-		t.Fatalf("Cannot initial database: %s", err)
+		log.Fatalf("Cannot initial database: %s", err)
 	}
 	defer mgr.Connection().Close()
-	h := &add{mgr}
+	fake := FakeAuthenticator("123456")
+	token, _ := fake.Token("123456")
+	return &add{mgr, fake}, token, mgr
+}
 
-	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/add", "", `{"when":1468248043,"foreign":100,"local":-100,"code":"AUD"}`)
+func TestAddOK(t *testing.T) {
+	h, token, mgr := makeAdd([]Order{})
+
+	resp, err := jsonapi.HandlerTest(h.Handle).Post(
+		"/api/add",
+		"",
+		`{"data":{"when":1468248043,"foreign":100,"local":-100,"code":"AUD"},"token":"`+token+`"}`,
+	)
 
 	if err != nil {
 		t.Fatalf("unexpected error occured when testing add: %s", err)
@@ -61,14 +74,13 @@ func TestAddDuplicated(t *testing.T) {
 	presetData := []Order{
 		Order{1468248039, 100, -100, "USD"},
 	}
-	mgr, err := initDB(presetData)
-	if err != nil {
-		t.Fatalf("Cannot initial database: %s", err)
-	}
-	defer mgr.Connection().Close()
-	h := &add{mgr}
+	h, token, _ := makeAdd(presetData)
 
-	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/add", "", `{"when":1468248039,"foreign":100,"local":-100,"code":"USD"}`)
+	resp, err := jsonapi.HandlerTest(h.Handle).Post(
+		"/api/add",
+		"",
+		`{"data":{"when":1468248039,"foreign":100,"local":-100,"code":"USD"},"token":"`+token+`"}`,
+	)
 
 	if err != nil {
 		t.Fatalf("unexpected error occured when testing add: %s", err)
@@ -80,14 +92,9 @@ func TestAddDuplicated(t *testing.T) {
 }
 
 func TestAddNoData(t *testing.T) {
-	mgr, err := initDB([]Order{})
-	if err != nil {
-		t.Fatalf("Cannot initial database: %s", err)
-	}
-	defer mgr.Connection().Close()
-	h := &add{mgr}
+	h, token, _ := makeAdd([]Order{})
 
-	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/add", "", `{}`)
+	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/add", "", `{"token":"`+token+`"}`)
 
 	if err != nil {
 		t.Fatalf("unexpected error occured when testing add: %s", err)
@@ -99,12 +106,7 @@ func TestAddNoData(t *testing.T) {
 }
 
 func TestAddNotJSON(t *testing.T) {
-	mgr, err := initDB([]Order{})
-	if err != nil {
-		t.Fatalf("Cannot initial database: %s", err)
-	}
-	defer mgr.Connection().Close()
-	h := &add{mgr}
+	h, token, _ := makeAdd([]Order{})
 
 	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/add", "", `1234`)
 
@@ -114,5 +116,23 @@ func TestAddNotJSON(t *testing.T) {
 
 	if resp.Code != http.StatusBadRequest {
 		t.Fatalf("unexpected status code %d for bas request: %s", resp.Code, resp.Body.String())
+	}
+}
+
+func TestAddWrondToken(t *testing.T) {
+	h, token, _ := makeAdd([]Order{})
+
+	resp, err := jsonapi.HandlerTest(h.Handle).Post(
+		"/api/add",
+		"",
+		`{"data":{"when":1468248043,"foreign":100,"local":-100,"code":"AUD"},"token":"`+token+`"}`,
+	)
+
+	if err != nil {
+		t.Fatalf("unexpected error occured when testing add: %s", err)
+	}
+
+	if resp.Code != http.StatusForbidden {
+		t.Fatalf("expect add return forbidden when wrong token, got %d: %s", resp.Code, resp.Body.String())
 	}
 }
