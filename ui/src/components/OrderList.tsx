@@ -17,7 +17,7 @@ import {VueComponent, Prop} from "vue-typescript";
                     </tr>
                 </thead>
                 <tbody v-cloak>
-                    <tr v-for="order of orders" track-by="when" transition="fade">
+                    <tr v-for="order of orders" track-by="code+when" transition="fade">
                         <td class="time">{`{{convertTime(order.when)}}`}</td>
                         <td class="currency">{`{{order.code | translate}}`}</td>
                         <td class="foreign" vbind_class="isNegClass(order.foreign)">{`{{order.foreign | floatFormat 2}}`}</td>
