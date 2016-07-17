@@ -123,13 +123,13 @@ func TestAddNotJSON(t *testing.T) {
 }
 
 func TestAddWrongToken(t *testing.T) {
-	h, token, mgr := makeAdd([]Order{})
+	h, _, mgr := makeAdd([]Order{})
 	defer mgr.Connection().Close()
 
 	resp, err := jsonapi.HandlerTest(h.Handle).Post(
 		"/api/add",
 		"",
-		`{"data":{"when":1468248043,"foreign":100,"local":-100,"code":"AUD"},"token":"`+token+`"}`,
+		`{"data":{"when":1468248043,"foreign":100,"local":-100,"code":"AUD"},"token":"1234"}`,
 	)
 
 	if err != nil {
