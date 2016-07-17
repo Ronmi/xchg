@@ -1,4 +1,5 @@
 import { OrderData, T } from "./types";
+import "./components/AuthForm";
 import "./components/OrderList";
 import "./components/OrderForm";
 import "./jsxdef";
@@ -34,6 +35,7 @@ let vm = new Vue({
             foreign: 0,
             code: "USD"
         },
+        token: "",
         orders: [] as OrderData[],
         orderType: ""
     },
@@ -51,7 +53,7 @@ let vm = new Vue({
 
             $.post({
                 url: "/api/list",
-                data: JSON.stringify({ code: this.orderType }),
+                data: JSON.stringify({ code: this.orderType, token: this.token }),
                 processData: false,
                 contentType: "text/plain",
                 dataType: "json"
@@ -61,10 +63,14 @@ let vm = new Vue({
             });
         },
         getAllOrders: function() {
-            let vm = this;
-            $.getJSON("/api/listall", {}, (data: any, status: string, xhr: JQueryXHR) => {
+            $.post({
+                url: "/api/listall",
+                data: JSON.stringify({ token: this.token }),
+                contentType: "text/plain",
+                dataType: "json"
+            }).done((data: any) => {
                 this.orders = data as OrderData[];
-                vm.sortOrders();
+                this.sortOrders();
             });
         },
         addOrder: function(data: OrderData) {
@@ -73,20 +79,30 @@ let vm = new Vue({
                 this.sortOrders();
             }
         }
-    },
-    ready: function() {
-        this.getOrders();
     }
 });
 
 vm.$on("orderEntered", function(d: OrderData) {
     $.post({
         url: "/api/add",
-        data: JSON.stringify(d),
+        data: JSON.stringify({ data: d, token: this.token }),
         processData: false,
         contentType: "text/plain; charset=UTF-8",
         dataType: "json"
     }).done(() => {
         this.addOrder(d);
+    });
+});
+
+vm.$on("pinEntered", function(pin: string) {
+    $.post({
+        url: "/api/auth",
+        data: JSON.stringify({ pin: pin }),
+        processData: false,
+        contentType: "text/plain; charset=UTF-8",
+        dataType: "json"
+    }).done((data: string) => {
+        this.token = data;
+        this.getOrders();
     });
 });
