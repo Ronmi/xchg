@@ -15,11 +15,11 @@ func (a *dumbAuth) Token(pin string) (string, error) {
 }
 
 func (a *dumbAuth) Valid(token string) bool {
-	if this.currentToken == "" {
+	if a.currentToken == "" {
 		return false
 	}
 
-	return this.currentToken == token
+	return a.currentToken == token
 }
 
 func FakeAuthenticator(pass string) Authenticator {
