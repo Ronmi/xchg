@@ -7,18 +7,19 @@ import (
 	"strings"
 	"testing"
 
+	"git.ronmi.tw/ronmi/sdm"
+
 	"github.com/Patrolavia/jsonapi"
 )
 
-func makeList(preset []Order) (*list, string) {
+func makeList(preset []Order) (*list, string, *sdm.Manager) {
 	mgr, err := initDB(preset)
 	if err != nil {
 		log.Fatalf("Cannot initial database: %s", err)
 	}
-	defer mgr.Connection().Close()
 	fake := FakeAuthenticator("123456")
 	token, _ := fake.Token("123456")
-	return &list{mgr, fake}, token
+	return &list{mgr, fake}, token, mgr
 }
 
 func TestList(t *testing.T) {
@@ -26,7 +27,8 @@ func TestList(t *testing.T) {
 		Order{1468248039, 100, -100, "USD"},
 		Order{1468248040, -50, 51, "USD"},
 	}
-	h, token := makeList(presetUSD)
+	h, token, mgr := makeList(presetUSD)
+	defer mgr.Connection().Close()
 
 	resp, err := jsonapi.HandlerTest(h.Handle).Post(
 		"/api/list",
@@ -57,7 +59,8 @@ func TestList(t *testing.T) {
 }
 
 func TestListEmpty(t *testing.T) {
-	h, token := makeList([]Order{})
+	h, token, mgr := makeList([]Order{})
+	defer mgr.Connection().Close()
 
 	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/list", "", `{"code":"NTD","token":"`+token+`"}`)
 
@@ -78,7 +81,8 @@ func TestListEmpty(t *testing.T) {
 }
 
 func TestListNoData(t *testing.T) {
-	h, token := makeList([]Order{})
+	h, token, mgr := makeList([]Order{})
+	defer mgr.Connection().Close()
 
 	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/list", "", `{"token":"`+token+`"}`)
 
@@ -92,7 +96,8 @@ func TestListNoData(t *testing.T) {
 }
 
 func TestListNotJSON(t *testing.T) {
-	h, _ := makeList([]Order{})
+	h, _, mgr := makeList([]Order{})
+	defer mgr.Connection().Close()
 
 	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/list", "", ``)
 
@@ -106,7 +111,8 @@ func TestListNotJSON(t *testing.T) {
 }
 
 func TestListWrongToken(t *testing.T) {
-	h, _ := makeList([]Order{})
+	h, _, mgr := makeList([]Order{})
+	defer mgr.Connection().Close()
 
 	resp, err := jsonapi.HandlerTest(h.Handle).Post(
 		"/api/list",

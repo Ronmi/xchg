@@ -16,7 +16,6 @@ func makeAdd(preset []Order) (*add, string, *sdm.Manager) {
 	if err != nil {
 		log.Fatalf("Cannot initial database: %s", err)
 	}
-	defer mgr.Connection().Close()
 	fake := FakeAuthenticator("123456")
 	token, _ := fake.Token("123456")
 	return &add{mgr, fake}, token, mgr
@@ -24,6 +23,7 @@ func makeAdd(preset []Order) (*add, string, *sdm.Manager) {
 
 func TestAddOK(t *testing.T) {
 	h, token, mgr := makeAdd([]Order{})
+	defer mgr.Connection().Close()
 
 	resp, err := jsonapi.HandlerTest(h.Handle).Post(
 		"/api/add",
@@ -74,7 +74,8 @@ func TestAddDuplicated(t *testing.T) {
 	presetData := []Order{
 		Order{1468248039, 100, -100, "USD"},
 	}
-	h, token, _ := makeAdd(presetData)
+	h, token, mgr := makeAdd(presetData)
+	defer mgr.Connection().Close()
 
 	resp, err := jsonapi.HandlerTest(h.Handle).Post(
 		"/api/add",
@@ -92,7 +93,8 @@ func TestAddDuplicated(t *testing.T) {
 }
 
 func TestAddNoData(t *testing.T) {
-	h, token, _ := makeAdd([]Order{})
+	h, token, mgr := makeAdd([]Order{})
+	defer mgr.Connection().Close()
 
 	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/add", "", `{"token":"`+token+`"}`)
 
@@ -106,7 +108,8 @@ func TestAddNoData(t *testing.T) {
 }
 
 func TestAddNotJSON(t *testing.T) {
-	h, _, _ := makeAdd([]Order{})
+	h, _, mgr := makeAdd([]Order{})
+	defer mgr.Connection().Close()
 
 	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/add", "", `1234`)
 
@@ -120,7 +123,8 @@ func TestAddNotJSON(t *testing.T) {
 }
 
 func TestAddWrongToken(t *testing.T) {
-	h, token, _ := makeAdd([]Order{})
+	h, token, mgr := makeAdd([]Order{})
+	defer mgr.Connection().Close()
 
 	resp, err := jsonapi.HandlerTest(h.Handle).Post(
 		"/api/add",
