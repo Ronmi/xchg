@@ -106,7 +106,7 @@ func TestListNotJSON(t *testing.T) {
 }
 
 func TestListWrongToken(t *testing.T) {
-	h, token := makeList([]Order{})
+	h, _ := makeList([]Order{})
 
 	resp, err := jsonapi.HandlerTest(h.Handle).Post(
 		"/api/list",

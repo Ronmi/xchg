@@ -76,7 +76,7 @@ func TestListAllEmpty(t *testing.T) {
 }
 
 func TestListAllNotJSON(t *testing.T) {
-	h, token := makeListAll([]Order{})
+	h, _ := makeListAll([]Order{})
 
 	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/listall", "", `1234`)
 
@@ -90,7 +90,7 @@ func TestListAllNotJSON(t *testing.T) {
 }
 
 func TestListAllWrongToken(t *testing.T) {
-	h, token := makeListAll([]Order{})
+	h, _ := makeListAll([]Order{})
 
 	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/listall", "", `{"token":"1234"}`)
 

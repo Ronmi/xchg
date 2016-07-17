@@ -106,7 +106,7 @@ func TestAddNoData(t *testing.T) {
 }
 
 func TestAddNotJSON(t *testing.T) {
-	h, token, _ := makeAdd([]Order{})
+	h, _, _ := makeAdd([]Order{})
 
 	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/add", "", `1234`)
 
@@ -119,7 +119,7 @@ func TestAddNotJSON(t *testing.T) {
 	}
 }
 
-func TestAddWrondToken(t *testing.T) {
+func TestAddWrongToken(t *testing.T) {
 	h, token, _ := makeAdd([]Order{})
 
 	resp, err := jsonapi.HandlerTest(h.Handle).Post(
