@@ -12,21 +12,34 @@ import (
 
 type add struct {
 	M *sdm.Manager
+	A Authenticator
 }
 
 func (h *add) Handle(enc *json.Encoder, dec *json.Decoder, httpData *jsonapi.HTTP) {
-	var param Order
+	type p struct {
+		Data  Order  `json:"data"`
+		Token string `json:"token"`
+	}
+
+	var param p
 	if err := dec.Decode(&param); err != nil {
 		httpData.WriteHeader(http.StatusBadRequest)
 		enc.Encode("Parameter is not Order object")
 		return
 	}
 
+	if !h.A.Valid(param.Token) {
+		httpData.WriteHeader(http.StatusForbidden)
+		enc.Encode("Invalid token")
+		return
+	}
+
 	// validating data
-	param.Code = strings.ToUpper(strings.TrimSpace(param.Code))
-	if len(param.Code) != 3 || param.Local == 0 || param.Foreign == 0 || param.Time <= 0 {
+	data := param.Data
+	data.Code = strings.ToUpper(strings.TrimSpace(data.Code))
+	if len(data.Code) != 3 || data.Local == 0 || data.Foreign == 0 || data.Time <= 0 {
 		httpData.WriteHeader(http.StatusBadRequest)
-		enc.Encode("Parameter is not Order object")
+		enc.Encode("Parameter has no Order object")
 		return
 	}
 
