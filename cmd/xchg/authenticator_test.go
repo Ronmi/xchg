@@ -22,6 +22,10 @@ func (a *dumbAuth) Valid(token string) bool {
 	return a.currentToken == token
 }
 
+func (a *dumbAuth) URI(user string) string {
+	return user
+}
+
 func FakeAuthenticator(pass string) Authenticator {
 	return &dumbAuth{password: pass}
 }

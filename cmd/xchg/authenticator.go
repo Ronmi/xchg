@@ -12,6 +12,7 @@ import (
 type Authenticator interface {
 	Token(pin string) (string, error)
 	Valid(token string) bool
+	URI(user string) string // 取得認證用 uri
 }
 
 // ErrPincode 代表 pin 碼檢查失敗
@@ -52,6 +53,10 @@ func (a *authenticator) Token(pin string) (string, error) {
 
 func (a *authenticator) Valid(token string) bool {
 	return token == a.current
+}
+
+func (a *authenticator) URI(user string) string {
+	return a.otp.ProvisionURIWithIssuer(user, "xchg")
 }
 
 // NewAuthenticator 建立一個 10 秒間隔的 totp Authenticator

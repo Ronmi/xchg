@@ -7,6 +7,7 @@ import (
 	"flag"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 
 	"git.ronmi.tw/ronmi/sdm"
@@ -40,6 +41,7 @@ func main() {
 
 	seed = strings.TrimSpace(seed)
 	authmgr := NewAuthenticator(checkSeed(seed))
+	log.Printf("To auth your self, install Google Authenticator and add this url in it: %s", authmgr.URI(os.Getenv("USER")))
 
 	db, err := sql.Open("sqlite3", constr)
 	if err != nil {
