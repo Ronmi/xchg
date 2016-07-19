@@ -53,10 +53,15 @@ func main() {
 	}
 
 	mgr := sdm.New(db)
-	jsonapi.HandleFunc("/api/auth", (&auth{authmgr}).Handle)
-	jsonapi.HandleFunc("/api/listall", (&listall{mgr, authmgr}).Handle)
-	jsonapi.HandleFunc("/api/list", (&list{mgr, authmgr}).Handle)
-	jsonapi.HandleFunc("/api/add", (&add{mgr, authmgr}).Handle)
+	jsonapi.Register(
+		[]jsonapi.API{
+			jsonapi.API{"/api/auth", (&auth{authmgr}).Handle},
+			jsonapi.API{"/api/listall", (&listall{mgr, authmgr}).Handle},
+			jsonapi.API{"/api/list", (&list{mgr, authmgr}).Handle},
+			jsonapi.API{"/api/add", (&add{mgr, authmgr}).Handle},
+		},
+		nil,
+	)
 
 	// serve ui files
 	http.Handle("/node_modules/", http.FileServer(http.Dir(uidir)))

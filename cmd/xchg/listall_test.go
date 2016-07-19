@@ -32,7 +32,7 @@ func TestListAll(t *testing.T) {
 	h, token, mgr := makeListAll(presetData)
 	defer mgr.Connection().Close()
 
-	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/listall", "", `{"token":"`+token+`"}`)
+	resp, err := jsonapi.HandlerTest(jsonapi.APIHandler(h.Handle).Handler).Post("/api/listall", "", `{"token":"`+token+`"}`)
 
 	if err != nil {
 		t.Fatalf("unexpected error occured when testing listall: %s", err)
@@ -60,7 +60,7 @@ func TestListAllEmpty(t *testing.T) {
 	h, token, mgr := makeListAll([]Order{})
 	defer mgr.Connection().Close()
 
-	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/listall", "", `{"token":"`+token+`"}`)
+	resp, err := jsonapi.HandlerTest(jsonapi.APIHandler(h.Handle).Handler).Post("/api/listall", "", `{"token":"`+token+`"}`)
 
 	if err != nil {
 		t.Fatalf("unexpected error occured when testing listall: %s", err)
@@ -82,7 +82,7 @@ func TestListAllNotJSON(t *testing.T) {
 	h, _, mgr := makeListAll([]Order{})
 	defer mgr.Connection().Close()
 
-	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/listall", "", `1234`)
+	resp, err := jsonapi.HandlerTest(jsonapi.APIHandler(h.Handle).Handler).Post("/api/listall", "", `1234`)
 
 	if err != nil {
 		t.Fatalf("unexpected error occured when testing listall: %s", err)
@@ -97,7 +97,7 @@ func TestListAllWrongToken(t *testing.T) {
 	h, _, mgr := makeListAll([]Order{})
 	defer mgr.Connection().Close()
 
-	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/listall", "", `{"token":"1234"}`)
+	resp, err := jsonapi.HandlerTest(jsonapi.APIHandler(h.Handle).Handler).Post("/api/listall", "", `{"token":"1234"}`)
 
 	if err != nil {
 		t.Fatalf("unexpected error occured when testing listall: %s", err)

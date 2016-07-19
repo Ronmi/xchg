@@ -15,7 +15,7 @@ type add struct {
 	A Authenticator
 }
 
-func (h *add) Handle(enc *json.Encoder, dec *json.Decoder, httpData *jsonapi.HTTP) {
+func (h *add) Handle(dec *json.Decoder, httpData *jsonapi.HTTP) (ret interface{}, err error) {
 	type p struct {
 		Data  Order  `json:"data"`
 		Token string `json:"token"`
@@ -23,31 +23,23 @@ func (h *add) Handle(enc *json.Encoder, dec *json.Decoder, httpData *jsonapi.HTT
 
 	var param p
 	if err := dec.Decode(&param); err != nil {
-		httpData.WriteHeader(http.StatusBadRequest)
-		enc.Encode("Parameter is not Order object")
-		return
+		return nil, jsonapi.Error{http.StatusBadRequest, "Parameter is not Order object"}
 	}
 
 	if !h.A.Valid(param.Token) {
-		httpData.WriteHeader(http.StatusForbidden)
-		enc.Encode("Invalid token")
-		return
+		return nil, jsonapi.Error{http.StatusForbidden, "Invalid token"}
 	}
 
 	// validating data
 	data := param.Data
 	data.Code = strings.ToUpper(strings.TrimSpace(data.Code))
 	if len(data.Code) != 3 || data.Local == 0 || data.Foreign == 0 || data.Time <= 0 {
-		httpData.WriteHeader(http.StatusBadRequest)
-		enc.Encode("Parameter has no Order object")
-		return
+		return nil, jsonapi.Error{http.StatusBadRequest, "Parameter has no Order object"}
 	}
 
 	if _, err := h.M.Insert("orders", data); err != nil {
-		httpData.WriteHeader(http.StatusInternalServerError)
-		enc.Encode(fmt.Sprintf("Error saving order: %s", err))
-		return
+		return nil, jsonapi.Error{http.StatusInternalServerError, fmt.Sprintf("Error saving order: %s", err)}
 	}
 
-	enc.Encode(nil)
+	return
 }

@@ -11,7 +11,7 @@ func TestAuthOK(t *testing.T) {
 	fake := FakeAuthenticator("123456")
 	h := &auth{fake}
 
-	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/auth", "", `{"pin":"123456"}`)
+	resp, err := jsonapi.HandlerTest(jsonapi.APIHandler(h.Handle).Handler).Post("/api/auth", "", `{"pin":"123456"}`)
 
 	if err != nil {
 		t.Fatalf("unexpected error occured when testing auth: %s", err)
@@ -40,7 +40,7 @@ func TestAuthWrongPin(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/auth", "", c.in)
+		resp, err := jsonapi.HandlerTest(jsonapi.APIHandler(h.Handle).Handler).Post("/api/auth", "", c.in)
 
 		if err != nil {
 			t.Fatalf("unexpected error occured when testing auth: %s", err)

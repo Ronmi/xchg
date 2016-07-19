@@ -15,28 +15,25 @@ type list struct {
 	A Authenticator
 }
 
-func (h *list) Handle(enc *json.Encoder, dec *json.Decoder, httpData *jsonapi.HTTP) {
+func (h *list) Handle(dec *json.Decoder, httpData *jsonapi.HTTP) (result interface{}, err error) {
 	type p struct {
 		Code  string `json:"code"`
 		Token string `json:"token"`
 	}
 
 	var param p
-	if err := dec.Decode(&param); err != nil {
-		httpData.WriteHeader(http.StatusBadRequest)
-		enc.Encode(fmt.Sprintf("Error decoding parameter: %s", err))
+	if err = dec.Decode(&param); err != nil {
+		err = jsonapi.Error{http.StatusBadRequest, fmt.Sprintf("Error decoding parameter: %s", err)}
 		return
 	}
 
 	if !h.A.Valid(param.Token) {
-		httpData.WriteHeader(http.StatusForbidden)
-		enc.Encode("Invalid token")
+		err = jsonapi.Error{http.StatusForbidden, "Invalid token"}
 		return
 	}
 
 	if param.Code == "" {
-		httpData.WriteHeader(http.StatusBadRequest)
-		enc.Encode("You must pass currency code to me.")
+		err = jsonapi.Error{http.StatusBadRequest, "You must pass currency code to me."}
 		return
 	}
 
@@ -50,14 +47,11 @@ func (h *list) Handle(enc *json.Encoder, dec *json.Decoder, httpData *jsonapi.HT
 		ret = append(ret, o)
 	}
 
-	if err := rows.Err(); err != nil {
-		httpData.WriteHeader(http.StatusInternalServerError)
-		enc.Encode(fmt.Sprintf("Error reading data from database: %s", err))
+	if err = rows.Err(); err != nil {
+		err = jsonapi.Error{http.StatusInternalServerError, fmt.Sprintf("Error reading data from database: %s", err)}
 		return
 	}
 
-	if err := enc.Encode(ret); err != nil {
-		httpData.WriteHeader(http.StatusInternalServerError)
-		enc.Encode(fmt.Sprintf("Error formatting data: %s", err))
-	}
+	return ret, nil
+
 }

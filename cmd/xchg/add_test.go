@@ -25,7 +25,7 @@ func TestAddOK(t *testing.T) {
 	h, token, mgr := makeAdd([]Order{})
 	defer mgr.Connection().Close()
 
-	resp, err := jsonapi.HandlerTest(h.Handle).Post(
+	resp, err := jsonapi.HandlerTest(jsonapi.APIHandler(h.Handle).Handler).Post(
 		"/api/add",
 		"",
 		`{"data":{"when":1468248043,"foreign":100,"local":-100,"code":"AUD"},"token":"`+token+`"}`,
@@ -77,7 +77,7 @@ func TestAddDuplicated(t *testing.T) {
 	h, token, mgr := makeAdd(presetData)
 	defer mgr.Connection().Close()
 
-	resp, err := jsonapi.HandlerTest(h.Handle).Post(
+	resp, err := jsonapi.HandlerTest(jsonapi.APIHandler(h.Handle).Handler).Post(
 		"/api/add",
 		"",
 		`{"data":{"when":1468248039,"foreign":100,"local":-100,"code":"USD"},"token":"`+token+`"}`,
@@ -96,7 +96,7 @@ func TestAddNoData(t *testing.T) {
 	h, token, mgr := makeAdd([]Order{})
 	defer mgr.Connection().Close()
 
-	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/add", "", `{"token":"`+token+`"}`)
+	resp, err := jsonapi.HandlerTest(jsonapi.APIHandler(h.Handle).Handler).Post("/api/add", "", `{"token":"`+token+`"}`)
 
 	if err != nil {
 		t.Fatalf("unexpected error occured when testing add: %s", err)
@@ -111,7 +111,7 @@ func TestAddNotJSON(t *testing.T) {
 	h, _, mgr := makeAdd([]Order{})
 	defer mgr.Connection().Close()
 
-	resp, err := jsonapi.HandlerTest(h.Handle).Post("/api/add", "", `1234`)
+	resp, err := jsonapi.HandlerTest(jsonapi.APIHandler(h.Handle).Handler).Post("/api/add", "", `1234`)
 
 	if err != nil {
 		t.Fatalf("unexpected error occured when testing add: %s", err)
@@ -126,7 +126,7 @@ func TestAddWrongToken(t *testing.T) {
 	h, _, mgr := makeAdd([]Order{})
 	defer mgr.Connection().Close()
 
-	resp, err := jsonapi.HandlerTest(h.Handle).Post(
+	resp, err := jsonapi.HandlerTest(jsonapi.APIHandler(h.Handle).Handler).Post(
 		"/api/add",
 		"",
 		`{"data":{"when":1468248043,"foreign":100,"local":-100,"code":"AUD"},"token":"1234"}`,
