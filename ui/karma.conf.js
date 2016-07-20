@@ -15,7 +15,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'tests/**/*.ts?'
+      'test/**/*.ts?'
     ],
 
 
@@ -28,10 +28,10 @@ module.exports = function(config) {
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
       'src/**/*': ['webpack', 'sourcemap'],
-      'tests/**/*': ['webpack', 'sourcemap']
+      'test/**/*': ['webpack', 'sourcemap']
     },
     webpack: {
-      //devtool: 'source-map',
+      devtool: 'source-map',
       resolve: {
 	// Add '.ts' and '.tsx' as resolvable extensions.
 	extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js", ".json"],
