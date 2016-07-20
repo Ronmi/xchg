@@ -42,20 +42,20 @@ export default class OrderFrom extends React.Component<Props, State> {
             <form onSubmit={this.handleSubmit.bind(this)}>
                 <fieldset>
                     <legend>新增</legend>
-                    <label for="date">
+                    <label htmlFor="date">
                         <span>交易時間</span>
                         <input name="date" type="datetime" onChange={this.setWhen.bind(this)} placeholder="年/月/日 時:分:秒"/>
                     </label>
-                    <label for="local">
+                    <label htmlFor="local">
                         <span>成本(買入為負)</span>
-                        <input name="local" type="number" step="0.01" v-model="formData.local"/>
+                        <input name="local" type="number" step="0.01" />
                     </label>
-                    <div class="foreign">
-                        <label for="foreign">
+                    <div className="foreign">
+                        <label htmlFor="foreign">
                             <span>金額(買入為正)</span>
-                            <input name="foreign" type="number" step="0.01" v-model="formData.foreign"/>
+                            <input name="foreign" type="number" step="0.01" />
                         </label>
-                        <label for="currency">
+                        <label htmlFor="currency">
                             <span>幣別</span>
                             <CurrencySelector codeSelected={this.setCode.bind(this)} defaultLabel="請選擇" />
                         </label>

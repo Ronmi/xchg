@@ -104,7 +104,7 @@ export default class App extends React.Component<{}, State> {
         return (
             <div>
                 <OrderForm submitOrder={this.submitOrder.bind(this)} />
-                <div class="list-type">
+                <div className="list-type">
                     <CurrencySelector
                         codeSelected={this.codeSelected.bind(this)}
                         defaultLabel="全部"

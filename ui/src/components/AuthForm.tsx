@@ -19,7 +19,7 @@ export default class AuthForm extends React.Component<Props, State> {
             <form onSubmit={this.handleSubmit.bind(this)}>
                 <fieldset>
                     <legend>使用者認證</legend>
-                    <label for="pin">
+                    <label htmlFor="pin">
                         <span>PIN</span>
                         <input name="pin" type="text" onChange={this.handleChange.bind(this)} placeholder="6 碼數字" />
                     </label>

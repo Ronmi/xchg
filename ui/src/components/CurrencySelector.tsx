@@ -17,13 +17,17 @@ export default class CurrencySelector extends React.Component<Props, {}> {
             return null;
         }
 
-        return <option value={this.props.defaultValue}>{this.props.defaultLabel}</option>
+        return (
+            <option value={this.props.defaultValue} key={this.props.defaultValue}>
+                {this.props.defaultLabel}
+            </option>
+        );
     }
 
     render() {
         let nodes = [] as JSX.Element[];
         for (let code in T) {
-            nodes[nodes.length] = <option value={code}>{T[code]}</option>;
+            nodes[nodes.length] = <option value={code} key={code}>{T[code]}</option>;
         }
 
         return (

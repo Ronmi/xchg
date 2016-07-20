@@ -11,12 +11,13 @@ interface Props {
 export default class OrderList extends React.Component<Props, {}> {
     render() {
         let nodes = this.props.data.map(function(val: OrderData) {
-            return <OrderListEntry data={val} />;
+            let key = val.code + String(val.when);
+            return <OrderListEntry data={val} key={key} />;
         });
 
         return (
-            <div class="list">
-                <table cellspacing="0">
+            <div className="list">
+                <table cellSpacing="0">
                     <caption>{translate(this.props.code)}交易記錄</caption>
                     <thead>
                         <tr>

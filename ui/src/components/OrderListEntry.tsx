@@ -21,11 +21,11 @@ export default class OrderListEntry extends React.Component<Props, {}> {
 
         return (
             <tr>
-                <td class="time">{this.convertTime(this.props.data.when)}</td>
-                <td class="currency">{translate(this.props.data.code)}</td>
-                <td class={foreign}>{formatNumber(this.props.data.foreign, 2)}</td>
-                <td class={local}>{this.props.data.local}</td>
-                <td class="rate">{formatNumber(rate, 4)}</td>
+                <td className="time">{this.convertTime(this.props.data.when)}</td>
+                <td className="currency">{translate(this.props.data.code)}</td>
+                <td className={foreign}>{formatNumber(this.props.data.foreign, 2)}</td>
+                <td className={local}>{this.props.data.local}</td>
+                <td className="rate">{formatNumber(rate, 4)}</td>
             </tr>
         );
     }
