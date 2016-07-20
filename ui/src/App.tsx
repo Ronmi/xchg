@@ -75,7 +75,7 @@ export default class App extends React.Component<{}, State> {
 
         $.post({
             url: "/api/list",
-            data: JSON.stringify({ code: this.state.code, token: this.state.token }),
+            data: JSON.stringify({ code: code, token: this.state.token }),
             processData: false,
             contentType: "text/plain",
             dataType: "json"
