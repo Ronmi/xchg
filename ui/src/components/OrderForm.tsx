@@ -1,89 +1,102 @@
-import { OrderData, T } from "../types";
-import * as JSX from "../jsx";
-import {VueComponent, Prop} from "vue-typescript";
+import * as React from "react";
+import { OrderData, translate } from "../types";
+import CurrencySelector from "./CurrencySelector";
 
-export interface OrderFormData {
-    when: string;
-    local: number;
-    foreign: number;
-    code: string;
+interface State {
+    when?: string;
+    local?: number;
+    foreign?: number;
+    code?: string;
 }
 
-@VueComponent({
-    template: (
-        <form v-on_submit="handleSubmit">
-	    <fieldset>
-	        <legend>新增</legend>
-	        <label for="date">
-	            <span>交易時間</span>
-	            <input name="date" type="datetime" v-model="formData.when" placeholder="年/月/日 時:分:秒"/>
-	        </label>
-	        <label for="local">
-	            <span>成本(買入為負)</span>
-	            <input name="local" type="number" step="0.01" v-model="formData.local"/>
-	        </label>
-	        <div class="foreign">
-	            <label for="foreign">
-		        <span>金額(買入為正)</span>
-		        <input name="foreign" type="number" step="0.01" v-model="formData.foreign"/>
-	            </label>
-	            <label for="currency">
-		        <span>幣別</span>
-		        <select name="currency" v-model="formData.code">
-		            <template v-for="(code, name) in T">
-		                <option v-bind_value="code">{`{{name}}`}</option>
-		            </template>
-		        </select>
-	            </label>
-	        </div>
-	        <button type="submit">送出</button>
-	    </fieldset>
-	</form>
-    )
-})
-class OrderForm extends Vue {
-    formData:OrderFormData = {
-        when: "",
-        local: 0,
-        foreign: 0,
-        code: "USD"
+interface Props {
+    submitOrder: (order: OrderData) => void;
+}
+
+export default class OrderFrom extends React.Component<Props, State> {
+    constructor(props?: Props, context?: any) {
+        super(props, context);
+        this.state = {
+            when: "",
+            local: 0,
+            foreign: 0,
+            code: ""
+        };
     }
 
-    T = T;
+    setWhen(e: Event) {
+        this.setState({ when: (e.target as HTMLInputElement).value });
+    }
+    setLocal(e: Event) {
+        this.setState({ local: Number((e.target as HTMLInputElement).value) });
+    }
+    setForeign(e: Event) {
+        this.setState({ foreign: Number((e.target as HTMLInputElement).value) });
+    }
+    setCode(code: string) {
+        this.setState({ code: code });
+    }
+
+    render() {
+        return (
+            <form onSubmit={this.handleSubmit.bind(this)}>
+                <fieldset>
+                    <legend>新增</legend>
+                    <label for="date">
+                        <span>交易時間</span>
+                        <input name="date" type="datetime" onChange={this.setWhen.bind(this)} placeholder="年/月/日 時:分:秒"/>
+                    </label>
+                    <label for="local">
+                        <span>成本(買入為負)</span>
+                        <input name="local" type="number" step="0.01" v-model="formData.local"/>
+                    </label>
+                    <div class="foreign">
+                        <label for="foreign">
+                            <span>金額(買入為正)</span>
+                            <input name="foreign" type="number" step="0.01" v-model="formData.foreign"/>
+                        </label>
+                        <label for="currency">
+                            <span>幣別</span>
+                            <CurrencySelector codeSelected={this.setCode.bind(this)} defaultLabel="請選擇" />
+                        </label>
+                    </div>
+                    <button type="submit">送出</button>
+                </fieldset>
+            </form>
+        );
+    }
 
     validateForm(): OrderData {
-        let d: number;
-        try {
-            d = Date.parse(this.formData.when);
-        } catch (e) {
+        let d = Date.parse(this.state.when);
+        if (d == Number.NaN) {
             return null;
         }
 
-        let v = this.formData.local * this.formData.foreign;
+        let v = this.state.local * this.state.foreign;
         if (v >= 0) {
             return null;
         }
 
-        if (!T[this.formData.code]) {
+        if (translate(this.state.code) === this.state.code) {
             return null;
         }
 
         return {
             when: Math.floor(d / 1000),
-            local: Number(this.formData.local),
-            foreign: Number(this.formData.foreign),
-            code: this.formData.code
+            local: this.state.local,
+            foreign: this.state.foreign,
+            code: this.state.code
         };
     }
 
-    handleSubmit(e:Event) {
+    handleSubmit(e: Event) {
         e.preventDefault();
         let data = this.validateForm();
-        if (data == null) {
+        if (data === null) {
             alert("格式錯誤"); // alert, 爛透惹ㄦ
             return;
         }
 
-        this.$dispatch("orderEntered", data);
+        this.props.submitOrder(data);
     }
 }

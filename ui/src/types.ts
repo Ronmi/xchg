@@ -12,3 +12,14 @@ export const T = {
     "EUR": "歐元",
     "AUD": "澳幣"
 } as { [prop: string]: string };
+
+export function translate(code: string): string {
+    let ret: string;
+    try {
+        ret = T[code];
+    } catch (e) {
+        return code;
+    }
+
+    return ret;
+}
