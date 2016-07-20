@@ -43,7 +43,7 @@ export default class OrderListEntry extends React.Component<Props, {}> {
     }
     convertTime(t: number): string {
         let d = new Date(t * 1000);
-        let ret = d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate();
+        let ret = d.getFullYear() + "/" + this.formatTime(d.getMonth() + 1) + "/" + this.formatTime(d.getDate());
         ret += " " + this.formatTime(d.getHours());
         ret += ":" + this.formatTime(d.getMinutes());
         ret += ":" + this.formatTime(d.getSeconds());
