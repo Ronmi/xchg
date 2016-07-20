@@ -1,5 +1,5 @@
 module.exports = {
-    entry: "./src/main.ts",
+    entry: "./src/main.tsx",
     output: {
         filename: "./js/bundle.js",
     },
@@ -29,6 +29,8 @@ module.exports = {
     // This is important because it allows us to avoid bundling all of our
     // dependencies, which allows browsers to cache those libraries between builds.
     externals: {
-        "vue": "Vue",
+      "jquery": "$",
+      "react": "React",
+      "react-dom": "ReactDOM"
     },
 };
