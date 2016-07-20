@@ -1,5 +1,7 @@
 import * as React from "react";
 import { OrderData, translate } from "../types";
+import OrderListEntry from "./OrderListEntry";
+import OrderListFooter from "./OrderListFooter";
 
 interface Props {
     code: string,
