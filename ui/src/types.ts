@@ -21,6 +21,9 @@ export function translate(code: string): string {
         return code;
     }
 
+    if (!ret) {
+        return code;
+    }
     return ret;
 }
 

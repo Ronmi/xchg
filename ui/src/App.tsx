@@ -68,7 +68,7 @@ export default class App extends React.Component<{}, State> {
         this.setState({ data: data });
     }
     getOrderList(code: string) {
-        if (code === translate(code)) {
+        if (code == translate(code)) {
             this.getAllOrderList();
             return;
         }
@@ -104,10 +104,12 @@ export default class App extends React.Component<{}, State> {
         return (
             <div>
                 <OrderForm submitOrder={this.submitOrder.bind(this)} />
-                <CurrencySelector
-                    codeSelected={this.codeSelected.bind(this)}
-                    defaultLabel="全部"
-                    defaultValue="ALL" />
+                <div class="list-type">
+                    <CurrencySelector
+                        codeSelected={this.codeSelected.bind(this)}
+                        defaultLabel="全部"
+                        defaultValue="ALL" />
+                </div>
                 <OrderList code={this.state.code} data={this.state.data} />
             </div>
         );
