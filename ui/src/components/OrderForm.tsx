@@ -48,12 +48,12 @@ export default class OrderFrom extends React.Component<Props, State> {
                     </label>
                     <label htmlFor="local">
                         <span>成本(買入為負)</span>
-                        <input name="local" type="number" step="0.01" />
+                        <input name="local" type="number" step="0.01" onChange={this.setLocal.bind(this)} />
                     </label>
                     <div className="foreign">
                         <label htmlFor="foreign">
                             <span>金額(買入為正)</span>
-                            <input name="foreign" type="number" step="0.01" />
+                            <input name="foreign" type="number" step="0.01" onChange={this.setForeign.bind(this)} />
                         </label>
                         <label htmlFor="currency">
                             <span>幣別</span>
