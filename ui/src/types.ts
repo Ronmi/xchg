@@ -23,3 +23,20 @@ export function translate(code: string): string {
 
     return ret;
 }
+
+export function formatNumber(val: number, size: number): string {
+    size = Math.floor(Math.abs(size));
+    let x = Math.pow(10, size);
+    let str = Math.round(val * x) + "";
+
+    while (str.length < size) {
+        str = "0" + str;
+    }
+
+    let l = str.length;
+    if (l === size) {
+        return "0." + str;
+    }
+
+    return str.substr(0, l - size) + "." + str.substr(l - size, size);
+}
