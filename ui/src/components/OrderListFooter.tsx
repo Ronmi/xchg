@@ -20,7 +20,7 @@ export default class OrderListFooter extends React.Component<Props, {}> {
         return (
             <tfoot>
                 <tr>
-                    <td colspan="5">持有量及平均匯率: {formatNumber(s.total, 2)} / {formatNumber(s.rate, 4)}</td>
+                    <td colSpan="5">持有量及平均匯率: {formatNumber(s.total, 2)} / {formatNumber(s.rate, 4)}</td>
                 </tr>
             </tfoot>
         );
