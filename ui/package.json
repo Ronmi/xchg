@@ -13,7 +13,7 @@
     "lite": "browser-sync start --config bs-config.js",
     "start": "tsc && webpack && concurrently \"npm run tsc:w\" \"npm run webpack:w\" \"npm run lite\"",
     "karma": "karma start --browsers PhantomJS,Firefox,Chrome",
-    "test": "tsc && mocha build/test/**/*.js"
+    "test": "tsc && mocha mocha.bootstrap.js build/test/**/*.js"
   },
   "author": "Ronmi Ren <ronmi.ren@gmail.com>",
   "license": "GPL-3.0",
@@ -30,7 +30,7 @@
     "jsdom": "^9.4.1",
     "json-loader": "^0.5.4",
     "karma": "^1.1.1",
-    "karma-chai": "^0.1.0",
+    "karma-chai-sinon": "^0.1.5",
     "karma-chrome-launcher": "^1.0.1",
     "karma-cli": "^1.0.1",
     "karma-firefox-launcher": "^1.0.0",
@@ -42,6 +42,8 @@
     "mocha": "^2.5.3",
     "phantomjs-prebuilt": "^2.1.7",
     "react-addons-test-utils": "^15.2.1",
+    "sinon": "^1.17.4",
+    "sinon-chai": "^2.8.0",
     "source-map-loader": "^0.1.5",
     "ts-loader": "^0.8.2",
     "typescript": "^1.8.10",
