@@ -33,7 +33,12 @@ module.exports = {
     loaders: [
       // All files with a '.ts' or '.tsx' extension will be handled by 'ts-loader'.
       { test: /\.tsx?$/, loader: "ts-loader" },
-      { test: /\.js/, loader: "babel-loader" },
+      {
+	test: /\.js/,
+	loader: "babel-loader",
+	exclude: /node_modules/,
+	query: { presets: ['es2015'], },
+      },
     ],
 
     preLoaders: [
