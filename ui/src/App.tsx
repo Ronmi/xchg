@@ -4,23 +4,28 @@ import AuthForm from "./components/AuthForm";
 import OrderForm from "./components/OrderForm";
 import CurrencySelector from "./components/CurrencySelector";
 import OrderList from "./components/OrderList";
+import API from "./API"
 
 function sorter(a: OrderData, b: OrderData): number {
     return a.when - b.when;
 }
 
+interface Props {
+    api: API;
+    errHandler: (msg: string) => void;
+}
 
 interface State {
-    token?: string;
+    authed?: boolean;
     code?: string;
     data?: OrderData[];
 }
 
-export default class App extends React.Component<{}, State> {
+export default class App extends React.Component<Props, State> {
     constructor(props?: any, context?: any) {
         super(props, context);
         this.state = {
-            token: "",
+            authed: false,
             code: "",
             data: []
         };
@@ -28,29 +33,25 @@ export default class App extends React.Component<{}, State> {
 
     // custom event handlers
     submitPincode(pin: string) {
-        $.post({
-            url: "/api/auth",
-            data: JSON.stringify({ pin: pin }),
-            processData: false,
-            contentType: "text/plain",
-            dataType: "json"
-        }).done((token: string) => {
-            this.setState({ token: token });
-            this.codeSelected(this.state.code);
-        });
+	this.props.api.Auth(pin).then(
+	    () => {
+		this.setState({authed: true});
+		this.codeSelected(this.state.code);
+	    },
+	    () => {
+		this.props.errHandler("認證失敗");
+	    }
+	);
     }
     submitOrder(order: OrderData) {
         let data = this.state.data;
         this.addOrder(order)
-        $.post({
-            url: "/api/add",
-            data: JSON.stringify({ data: order, token: this.state.token }),
-            processData: false,
-            contentType: "text/plain; charset=UTF-8",
-            dataType: "json"
-        }).fail(() => {
-            this.setState({ data: data });
-        });
+	this.props.api.Add(order).then(
+	    () => { /* do nothing */ },
+	    () => {
+		this.setState({ data: data });
+	    }
+	);
     }
     codeSelected(code: string) {
         this.getOrderList(code);
@@ -73,37 +74,36 @@ export default class App extends React.Component<{}, State> {
             return;
         }
 
-        $.post({
-            url: "/api/list",
-            data: JSON.stringify({ code: code, token: this.state.token }),
-            processData: false,
-            contentType: "text/plain",
-            dataType: "json"
-        }).done((data: OrderData[]) => {
-            data.sort(sorter);
-            this.setState({ code: code, data: data });
-        });
+	this.props.api.List(code).then(
+	    (data: OrderData[]) => {
+		data.sort(sorter);
+		this.setState({ code: code, data: data });
+	    }
+	);
     }
     getAllOrderList() {
-        $.post({
-            url: "/api/listall",
-            data: JSON.stringify({ token: this.state.token }),
-            contentType: "text/plain",
-            dataType: "json"
-        }).done((data: OrderData[]) => {
-            data.sort(sorter);
-            this.setState({ code: "", data: data });
-        });
+	this.props.api.ListAll().then(
+	    (data: OrderData[]) => {
+		data.sort(sorter);
+		this.setState({ code: "", data: data });
+	    }
+	);
     }
 
     render() {
-        if (this.state.token === "") {
-            return (<AuthForm submitPincode={this.submitPincode.bind(this)} error={alert} />);
+        if (!this.state.authed) {
+            return (
+		<AuthForm
+		    submitPincode={this.submitPincode.bind(this)}
+		    error={this.props.errHandler} />
+	    );
         }
 
         return (
             <div>
-                <OrderForm submitOrder={this.submitOrder.bind(this)} error={alert} />
+                <OrderForm
+		    submitOrder={this.submitOrder.bind(this)}
+		    error={this.props.errHandler} />
                 <div className="list-type">
                     <CurrencySelector
                         codeSelected={this.codeSelected.bind(this)}
