@@ -98,7 +98,7 @@ export default class App extends React.Component<{}, State> {
 
     render() {
         if (this.state.token === "") {
-            return (<AuthForm submitPincode={this.submitPincode.bind(this)} />);
+            return (<AuthForm submitPincode={this.submitPincode.bind(this)} error={alert} />);
         }
 
         return (

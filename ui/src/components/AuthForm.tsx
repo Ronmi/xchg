@@ -2,6 +2,7 @@ import * as React from "react";
 
 interface Props {
     submitPincode: (pin: string) => void; // callback
+    error: (msg: string) => void;
 }
 
 interface State {
@@ -38,7 +39,7 @@ export default class AuthForm extends React.Component<Props, State> {
 
         if (! /^[0-9]{6}$/.test(this.state.pin)) {
             // 爛透惹
-            alert("PIN 碼必須是 6 位數字");
+            this.props.error("PIN 碼必須是 6 位數字");
             return
         }
 
