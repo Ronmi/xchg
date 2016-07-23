@@ -44,7 +44,7 @@ export default class OrderFrom extends React.Component<Props, State> {
                     <legend>新增</legend>
                     <label htmlFor="date">
                         <span>交易時間</span>
-                        <input name="date" type="datetime" onChange={this.setWhen.bind(this)} placeholder="年/月/日 時:分:秒"/>
+                        <input name="when" type="datetime" onChange={this.setWhen.bind(this)} placeholder="年/月/日 時:分:秒"/>
                     </label>
                     <label htmlFor="local">
                         <span>成本(買入為負)</span>
