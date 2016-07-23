@@ -18,11 +18,15 @@
   "author": "Ronmi Ren <ronmi.ren@gmail.com>",
   "license": "GPL-3.0",
   "dependencies": {
+    "es5-shim": "^4.5.9",
+    "es6-shim": "^0.35.1",
     "jquery": "^3.1.0",
     "react": "^15.2.1",
     "react-dom": "^15.2.1"
   },
   "devDependencies": {
+    "babel-core": "^6.11.4",
+    "babel-loader": "^6.2.4",
     "chai": "^3.5.0",
     "concurrently": "^2.2.0",
     "enzyme": "^2.4.1",
@@ -33,6 +37,8 @@
     "karma-chai-sinon": "^0.1.5",
     "karma-chrome-launcher": "^1.0.1",
     "karma-cli": "^1.0.1",
+    "karma-es5-shim": "0.0.4",
+    "karma-es6-shim": "^1.0.0",
     "karma-firefox-launcher": "^1.0.0",
     "karma-mocha": "^1.1.1",
     "karma-phantomjs-launcher": "^1.0.1",
