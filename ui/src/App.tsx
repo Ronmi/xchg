@@ -103,7 +103,7 @@ export default class App extends React.Component<{}, State> {
 
         return (
             <div>
-                <OrderForm submitOrder={this.submitOrder.bind(this)} />
+                <OrderForm submitOrder={this.submitOrder.bind(this)} error={alert} />
                 <div className="list-type">
                     <CurrencySelector
                         codeSelected={this.codeSelected.bind(this)}

@@ -11,6 +11,7 @@ interface State {
 
 interface Props {
     submitOrder: (order: OrderData) => void;
+    error?: (msg: string) => void;
 }
 
 export default class OrderFrom extends React.Component<Props, State> {
@@ -68,7 +69,7 @@ export default class OrderFrom extends React.Component<Props, State> {
 
     validateForm(): OrderData {
         let d = Date.parse(this.state.when);
-        if (d == Number.NaN) {
+        if (isNaN(d)) {
             return null;
         }
 
@@ -93,7 +94,7 @@ export default class OrderFrom extends React.Component<Props, State> {
         e.preventDefault();
         let data = this.validateForm();
         if (data === null) {
-            alert("格式錯誤"); // alert, 爛透惹ㄦ
+            this.props.error("格式錯誤");
             return;
         }
 

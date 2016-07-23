@@ -9,6 +9,12 @@ import { OrderData } from "../../src/types";
 // use global chai since karma-chai-sinon registers to global scope
 let expect = chai.expect;
 
+// helper to emit dom event
+function EV(wrapper: any, ev: string, value: any) {
+    wrapper.simulate(ev, {target: {value: value}});
+}
+
+
 describe("<OrderForm />", () => {
     let d = "2016/07/23 00:00:00";
     let when = Math.floor(Date.parse(d)/1000);
@@ -45,9 +51,10 @@ describe("<OrderForm />", () => {
 	};
 
 	// simulates filling correct data
-	wrapper.find('input[name="when"]').simulate("change", {target: {value: d}});
-	wrapper.find('input[name="local"]').simulate("change", {target: {value: "-3300"}});
-	wrapper.find('input[name="foreign"]').simulate("change", {target: {value: "100"}});
+
+	EV(wrapper.find('input[name="when"]'), "change", d);
+	EV(wrapper.find('input[name="local"]'), "change", -3300);
+	EV(wrapper.find('input[name="foreign"]'), "change", 100);
 	wrapper.find('CurrencySelector').prop("codeSelected")("USD");
 
 	// simulates submitting
@@ -62,7 +69,24 @@ describe("<OrderForm />", () => {
     });
 
     describe("failing", () => {
-	it("emits an error event when date format is invalid");
+	it("emits an error event when date format is invalid, and no submitCode event", () => {
+	    let e = sinon.spy();
+	    let s = sinon.spy();
+	    let wrapper = shallow(<OrderForm submitOrder={s} error={e} />);
+
+	    EV(wrapper.find('input[name="when"]'), "change", "fail");
+	    EV(wrapper.find('input[name="local"]'), "change", -3300);
+	    EV(wrapper.find('input[name="foreign"]'), "change", 100);
+	    wrapper.find('CurrencySelector').prop("codeSelected")("USD");
+	    wrapper.find("form").simulate("submit", {preventDefault: function(){}});
+
+	    expect(e).to.be.calledOnce;
+	    expect(s).not.to.be.called;
+	});
+	it("emits an error event when foreign currency format is invalid", () => {
+	});
+	it("emits an error event when local currency format is invalid", () => {
+	});
 	it("emits an error event when both local and foreign currency are positive");
 	it("emits an error event when both local and foreign currency are negative");
     });
