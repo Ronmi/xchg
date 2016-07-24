@@ -1,3 +1,5 @@
+/// <reference path="../typings/globals/es6-shim/index.d.ts" />
+
 import * as React from "react";
 import { OrderData, translate } from "./types";
 import AuthForm from "./components/AuthForm";
@@ -31,30 +33,36 @@ export default class App extends React.Component<Props, State> {
         };
     }
 
-    // custom event handlers
-    submitPincode(pin: string) {
-	this.props.api.Auth(pin).then(
-	    () => {
-		this.setState({authed: true});
-		this.codeSelected(this.state.code);
-	    },
-	    () => {
-		this.props.errHandler("認證失敗");
-	    }
-	);
+    // custom event handlers, returns promise so we can test on it
+    submitPincode(pin: string): Promise<void> {
+        return new Promise<void>((res, rej) => {
+            this.props.api.Auth(pin).then(
+                () => {
+                    this.setState({ authed: true });
+                    this.codeSelected(this.state.code).then(() => { res(); }, () => { res(); });
+                },
+                () => {
+                    this.props.errHandler("認證失敗");
+                    rej();
+                }
+            );
+        });
     }
-    submitOrder(order: OrderData) {
+    submitOrder(order: OrderData): Promise<void> {
         let data = this.state.data;
         this.addOrder(order)
-	this.props.api.Add(order).then(
-	    () => { /* do nothing */ },
-	    () => {
-		this.setState({ data: data });
-	    }
-	);
+        return new Promise<void>((res, rej) => {
+            this.props.api.Add(order).then(
+                () => { res(); },
+                () => {
+                    this.setState({ data: data });
+                    rej();
+                }
+            );
+        });
     }
-    codeSelected(code: string) {
-        this.getOrderList(code);
+    codeSelected(code: string): Promise<void> {
+        return this.getOrderList(code);
     }
 
     // helper methods
@@ -68,42 +76,51 @@ export default class App extends React.Component<Props, State> {
         data.sort(sorter);
         this.setState({ data: data });
     }
-    getOrderList(code: string) {
+    getOrderList(code: string): Promise<void> {
         if (code == translate(code)) {
-            this.getAllOrderList();
-            return;
+            return this.getAllOrderList();
         }
 
-	this.props.api.List(code).then(
-	    (data: OrderData[]) => {
-		data.sort(sorter);
-		this.setState({ code: code, data: data });
-	    }
-	);
+        return new Promise<void>((res, rej) => {
+            this.props.api.List(code).then(
+                (data: OrderData[]) => {
+                    data.sort(sorter);
+                    this.setState({ code: code, data: data });
+                    res();
+                },
+                () => { rej(); }
+            );
+        });
     }
-    getAllOrderList() {
-	this.props.api.ListAll().then(
-	    (data: OrderData[]) => {
-		data.sort(sorter);
-		this.setState({ code: "", data: data });
-	    }
-	);
+    getAllOrderList(): Promise<void> {
+        return new Promise<void>((res, rej) => {
+            this.props.api.ListAll().then(
+                (data: OrderData[]) => {
+                    data.sort(sorter);
+                    this.setState({ code: "", data: data });
+                    res();
+                },
+                () => { rej(); }
+            );
+        });
     }
 
     render() {
         if (!this.state.authed) {
             return (
-		<AuthForm
-		    submitPincode={this.submitPincode.bind(this)}
-		    error={this.props.errHandler} />
-	    );
+                <div>
+                    <AuthForm
+                        submitPincode={this.submitPincode.bind(this)}
+                        error={this.props.errHandler} />
+                </div>
+            );
         }
 
         return (
             <div>
                 <OrderForm
-		    submitOrder={this.submitOrder.bind(this)}
-		    error={this.props.errHandler} />
+                    submitOrder={this.submitOrder.bind(this)}
+                    error={this.props.errHandler} />
                 <div className="list-type">
                     <CurrencySelector
                         codeSelected={this.codeSelected.bind(this)}
