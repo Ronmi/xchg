@@ -49,7 +49,7 @@ export default class App extends React.Component<Props, State> {
         });
     }
     submitOrder(order: OrderData): Promise<void> {
-        let data = this.state.data;
+        let data = this.state.data.slice(0);
         this.addOrder(order)
         return new Promise<void>((res, rej) => {
             this.props.api.Add(order).then(
@@ -67,11 +67,11 @@ export default class App extends React.Component<Props, State> {
 
     // helper methods
     addOrder(order: OrderData) {
-        if (order.code !== this.state.code) {
+        if (order.code !== this.state.code && this.state.code !== "") {
             return;
         }
 
-        let data = this.state.data;
+        let data = this.state.data.slice(0);
         data.push(order);
         data.sort(sorter);
         this.setState({ data: data });
