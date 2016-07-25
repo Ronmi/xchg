@@ -14,7 +14,7 @@ interface Props {
     error?: (msg: string) => void;
 }
 
-export default class OrderFrom extends React.Component<Props, State> {
+export default class OrderForm extends React.Component<Props, State> {
     constructor(props?: Props, context?: any) {
         super(props, context);
         this.state = {
