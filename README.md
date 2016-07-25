@@ -6,6 +6,25 @@
 
 從舊到新，一個一個 commit 看它的 log message 和 diff，應該可以理解我的開發思路；別忘了開個分支出來執行和修改看看。
 
+## TL; DR
+
+- [萬事起頭難](https://github.com/Ronmi/xchg/commit/b81ff0eeb3c2091c1a5b01779f3f22af4e2a9774)
+- [先從定義格式開始](https://github.com/Ronmi/xchg/commit/ae3cd9870ed7319a4bf6b19a26cf0d056d50947a)
+- [寫個測試](https://github.com/Ronmi/xchg/commit/88d90f864ed94d0074ef655b8a870745700471e0)
+- [時常確認你的測試跟規格書相符](https://github.com/Ronmi/xchg/commit/b8960372f2decf85931f904796ac39131f2b0c92)
+- [當心測試污染](https://github.com/Ronmi/xchg/commit/220e9aea8263a18c49ad54622cd32eb9be1b2ad1)
+- test coverage [1](https://github.com/Ronmi/xchg/commit/a166211e5a75f71a7006b087d57e52dbdc66564c) [2](https://github.com/Ronmi/xchg/commit/2ec1d9e59b6269dc3041ab48f2bac727356fc8c0)
+- [抽換不可測試的程式](https://github.com/Ronmi/xchg/commit/61cfecc146dceb8c40f93827994ab6de16a4bd05)
+- [優質參考資料](https://github.com/Ronmi/xchg/commit/ad10bcb9ab66dbdde846187319f68daf15492baf)
+
+- [vuejs/angular2/react 的一點感想](https://github.com/Ronmi/xchg/commit/ed4d7fa5be1dcff297f0f5c95295d5d689ff559f)
+- [先寫規格再寫測試碼](https://github.com/Ronmi/xchg/commit/728f5da42198b2b7324399d7f1bacc1a9d2f22ac)
+- [儘力避免測試實作細節](https://github.com/Ronmi/xchg/commit/561c2365951fb28bda2a4b132a682d9e0c745cdf)
+- [抽換不可測試的程式](https://github.com/Ronmi/xchg/commit/0ec5630d1a767a771ab8aabe6a349acd8ceffa09)
+- [為了語意清晰](https://github.com/Ronmi/xchg/commit/5ee43375a033b0846715a7bdb348e0afc1fc8d01)
+
+- [merge 的好習慣](https://github.com/Ronmi/xchg/commit/56fbcea41fdeb6a27fda54b1b8ba7fe249bfa733)
+
 # 源起
 
 一開始只是想摸看看 typescript 和 vuejs，所以想找個小東西試試手感。寫到一半的時候想到：對一些新手而言，學會語法還是寫不出完整的程式來。我認為這是因為沒有語感，就好像背了一堆英文單字，結果看到外國人還是說不出話來。語感是培養出來的，多聽多說自然會提昇。所以我決定把原專案砍掉重練，記錄每一階段的開發思路，希望能讓中、新手可以多一個參考。
