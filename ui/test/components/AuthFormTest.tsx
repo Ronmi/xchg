@@ -9,7 +9,7 @@ import AuthForm from "../../src/components/AuthForm";
 let expect = chai.expect;
 
 describe("<AuthForm />", () => {
-    let wrapper = shallow(<AuthForm submitPincode={() => {}} error={() => {}} />);
+    let wrapper = shallow(<AuthForm submitPincode={() => {}} formatError={() => {}} />);
     it("is a form", () => {
 	expect(wrapper.is("form")).to.be.true;
     });
@@ -21,7 +21,7 @@ describe("<AuthForm />", () => {
     });
     it("emits submitPincode event when submitting 6 digit", () => {
 	let s = sinon.spy();
-	let wrapper = shallow(<AuthForm submitPincode={s} error={() => {}} />);
+	let wrapper = shallow(<AuthForm submitPincode={s} formatError={() => {}} />);
 	wrapper.find('input[name="pin"]').simulate("change", {target: {value: 123456}});
 	wrapper.find("form").simulate("submit", {preventDefault: function(){}});
 
@@ -30,7 +30,7 @@ describe("<AuthForm />", () => {
     it("emits only error event when submitting wrong format", () => {
 	let s = sinon.spy();
 	let e = sinon.spy();
-	let wrapper = shallow(<AuthForm submitPincode={s} error={e} />);
+	let wrapper = shallow(<AuthForm submitPincode={s} formatError={e} />);
 	wrapper.find('input[name="pin"]').simulate("change", {target: {value: 1234567}});
 	wrapper.find("form").simulate("submit", {preventDefault: function(){}});
 

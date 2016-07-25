@@ -75,10 +75,10 @@ describe("<OrderForm />", () => {
             EV(wrapper.find('input[name="foreign"]'), "change", 100);
             wrapper.find('CurrencySelector').prop("codeSelected")("USD");
         };
-        it("emits only an error event when date format is invalid", () => {
+        it("emits only an format error event when date format is invalid", () => {
             let e = sinon.spy();
             let s = sinon.spy();
-            let wrapper = shallow(<OrderForm submitOrder={s} error={e} />);
+            let wrapper = shallow(<OrderForm submitOrder={s} formatError={e} />);
 
             preset(wrapper);
             EV(wrapper.find('input[name="when"]'), "change", "fail");
@@ -87,10 +87,10 @@ describe("<OrderForm />", () => {
             expect(e).to.be.calledOnce;
             expect(s).not.to.be.called;
         });
-        it("emits only an error event when foreign currency format is invalid", () => {
+        it("emits only an format error event when foreign currency format is invalid", () => {
             let e = sinon.spy();
             let s = sinon.spy();
-            let wrapper = shallow(<OrderForm submitOrder={s} error={e} />);
+            let wrapper = shallow(<OrderForm submitOrder={s} formatError={e} />);
 
             preset(wrapper);
             EV(wrapper.find('input[name="foreign"]'), "change", "fail");
@@ -99,10 +99,10 @@ describe("<OrderForm />", () => {
             expect(e).to.be.calledOnce;
             expect(s).not.to.be.called;
         });
-        it("emits only an error event when local currency format is invalid", () => {
+        it("emits only an format error event when local currency format is invalid", () => {
             let e = sinon.spy();
             let s = sinon.spy();
-            let wrapper = shallow(<OrderForm submitOrder={s} error={e} />);
+            let wrapper = shallow(<OrderForm submitOrder={s} formatError={e} />);
 
             preset(wrapper);
             EV(wrapper.find('input[name="local"]'), "change", "fail");
@@ -111,10 +111,10 @@ describe("<OrderForm />", () => {
             expect(e).to.be.calledOnce;
             expect(s).not.to.be.called;
         });
-        it("emits only an error event when both local and foreign currency are positive", () => {
+        it("emits only an format error event when both local and foreign currency are positive", () => {
             let e = sinon.spy();
             let s = sinon.spy();
-            let wrapper = shallow(<OrderForm submitOrder={s} error={e} />);
+            let wrapper = shallow(<OrderForm submitOrder={s} formatError={e} />);
 
             preset(wrapper);
             EV(wrapper.find('input[name="local"]'), "change", 3300);
@@ -123,10 +123,10 @@ describe("<OrderForm />", () => {
             expect(e).to.be.calledOnce;
             expect(s).not.to.be.called;
         });
-        it("emits only an error event when both local and foreign currency are negative", () => {
+        it("emits only an format error event when both local and foreign currency are negative", () => {
             let e = sinon.spy();
             let s = sinon.spy();
-            let wrapper = shallow(<OrderForm submitOrder={s} error={e} />);
+            let wrapper = shallow(<OrderForm submitOrder={s} formatError={e} />);
 
             preset(wrapper);
             EV(wrapper.find('input[name="local"]'), "change", 3300);

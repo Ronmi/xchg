@@ -43,12 +43,12 @@ describe("<App />", () => {
     describe("structure", () => {
 	it("shows only AuthForm if not logged in", () => {
 	    let api = new FakeAPI();
-	    let wrapper = shallow(<App api={api} errHandler={()=>{}} />);
+	    let wrapper = shallow(<App api={api} alert={()=>{}} />);
 	    expect(wrapper.find("AuthForm")).to.have.length(1);
 	});
 	it("shows OrderForm, CurrencySelector and OrderList after loggedin", () => {
 	    let api = new FakeAPI();
-	    let wrapper = shallow(<App api={api} errHandler={()=>{}} />);
+	    let wrapper = shallow(<App api={api} alert={()=>{}} />);
 	    wrapper.setState({authed: true, code: "", data: []});
 	    wrapper.update();
 	    expect(wrapper.find("OrderForm")).to.have.length(1);
@@ -62,7 +62,7 @@ describe("<App />", () => {
 	    let api = new FakeAPI();
 	    api.will.success();
 	    sinon.spy(api, "Auth");
-	    let wrapper = shallow(<App api={api} errHandler={()=>{}} />);
+	    let wrapper = shallow(<App api={api} alert={()=>{}} />);
 	    helper.emitPincode(wrapper).then(
 		check(done, () => {
 		    expect(api.Auth).has.been.calledOnce;
@@ -75,7 +75,7 @@ describe("<App />", () => {
 	    let api = new FakeAPI();
 	    api.will.fail();
 	    sinon.spy(api, "Auth");
-	    let wrapper = shallow(<App api={api} errHandler={()=>{}} />);
+	    let wrapper = shallow(<App api={api} alert={()=>{}} />);
 	    helper.emitPincode(wrapper).then(
 		() => { done(new Error("Unexpected api success with api.Auth")); },
 		check(done, () => {
@@ -88,7 +88,7 @@ describe("<App />", () => {
 	    api.will.success();
 	    api.fakeData = [{when: 1, foreign: 1, local: -1, code: "USD"}];
 	    sinon.spy(api, "ListAll");
-	    let wrapper = shallow(<App api={api} errHandler={()=>{}} />);
+	    let wrapper = shallow(<App api={api} alert={()=>{}} />);
 	    helper.emitPincode(wrapper).then(
 		check(done, () => {
 		    expect(api.ListAll).has.been.calledOnce;
@@ -101,7 +101,7 @@ describe("<App />", () => {
 	    let api = new FakeAPI();
 	    api.will.success();
 	    sinon.spy(api, "Add");
-	    let wrapper = shallow(<App api={api} errHandler={()=>{}} />);
+	    let wrapper = shallow(<App api={api} alert={()=>{}} />);
 	    helper.emitPincode(wrapper).then(
 		check(done, () => {
 		    wrapper.update();
@@ -119,7 +119,7 @@ describe("<App />", () => {
 	    let order = {when:1, local: -1, foreign: 1, code: "USD"}
 	    let api = new FakeAPI();
 	    api.will.success();
-	    let wrapper = shallow(<App api={api} errHandler={()=>{}} />);
+	    let wrapper = shallow(<App api={api} alert={()=>{}} />);
 	    helper.emitPincode(wrapper).then(
 		check(done, () => {
 		    wrapper.update();
@@ -138,7 +138,7 @@ describe("<App />", () => {
 	    let order = {when:1, local: -1, foreign: 1, code: "USD"}
 	    let api = new FakeAPI();
 	    api.will.success();
-	    let wrapper = shallow(<App api={api} errHandler={()=>{}} />);
+	    let wrapper = shallow(<App api={api} alert={()=>{}} />);
 	    helper.emitPincode(wrapper).then(
 		() => {
 		    wrapper.update();
@@ -160,7 +160,7 @@ describe("<App />", () => {
 	    let api = new FakeAPI();
 	    sinon.spy(api, "List");
 	    api.will.success();
-	    let wrapper = shallow(<App api={api} errHandler={()=>{}} />);
+	    let wrapper = shallow(<App api={api} alert={()=>{}} />);
 	    helper.emitPincode(wrapper).then(
 		() => {
 		    wrapper.update();
