@@ -9,7 +9,7 @@ import { translate } from "../../src/types";
 describe("<OrderListEntry />", () => {
     const date = "2016/07/21 00:00:00";
     let d = new Date(date);
-    let data = {when: d.getTime()/1000, local: -3300, foreign: 100, code: "USD"};
+    let data = { when: d.getTime() / 1000, local: -3300, foreign: 100, code: "USD" };
     let wrapper = shallow(<OrderListEntry data={data} />);
 
     it("has a tr with 5 td.", () => {

@@ -67,7 +67,7 @@ describe("API mock", () => {
     describe("with success()", () => {
         let api = new FakeAPI();
         api.fakeData = [
-            {when: 1, local: -1, foreign: 1, code: "USD"},
+            { when: 1, local: -1, foreign: 1, code: "USD" },
         ];
         api.will.success();
         it("runs Auth() successfuly", (done) => {
@@ -77,7 +77,7 @@ describe("API mock", () => {
             );
         });
         it("runs Add() successfuly", (done) => {
-            api.Add({when: 0, foreign: 1, local: -1, code: "USD"}).then(
+            api.Add({ when: 0, foreign: 1, local: -1, code: "USD" }).then(
                 () => { done(); },
                 () => { throw "error"; }
             );
@@ -111,7 +111,7 @@ describe("API mock", () => {
             );
         });
         it("fails to run Add()", (done) => {
-            api.Add({when: 0, foreign: 1, local: -1, code: "USD"}).then(
+            api.Add({ when: 0, foreign: 1, local: -1, code: "USD" }).then(
                 () => { throw "error"; },
                 () => { done(); }
             );

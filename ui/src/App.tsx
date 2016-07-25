@@ -106,10 +106,10 @@ export default class App extends React.Component<Props, State> {
     }
 
     handlePinFormatError() {
-	this.props.alert("PIN 碼格式錯誤，必須是六位數字");
+        this.props.alert("PIN 碼格式錯誤，必須是六位數字");
     }
     handleOrderFormatError() {
-	this.props.alert("格式錯誤，請重新確認");
+        this.props.alert("格式錯誤，請重新確認");
     }
 
     render() {
