@@ -13,7 +13,8 @@
     "lite": "browser-sync start --config bs-config.js",
     "start": "tsc && webpack && concurrently \"npm run tsc:w\" \"npm run webpack:w\" \"npm run lite\"",
     "karma": "karma start --browsers PhantomJS,Firefox,Chrome",
-    "test": "rm -fr build && tsc && find build/test -name '*.js' -type f | xargs mocha mocha.bootstrap.js"
+    "travis": "npm test && karma start --single-run",
+    "test": "rm -fr build && tsc && find build/test -name '*.js' -type f | xargs mocha -r es6-shim mocha.bootstrap.js"
   },
   "author": "Ronmi Ren <ronmi.ren@gmail.com>",
   "license": "GPL-3.0",

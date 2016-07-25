@@ -6,3 +6,10 @@ go:
 
 script:
   - go test -v ./cmd/...
+  - node -v
+  - cd ui ; npm i && npm prune && npm run travis
+
+cache:
+  directories:
+    - ui/node_modules
+    - ui/typings
