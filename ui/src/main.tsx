@@ -6,6 +6,6 @@ import { ByJquery } from "./API";
 let api = new ByJquery();
 
 ReactDOM.render(
-    <App api={api} errHandler={alert} />,
+    <App api={api} alert={alert} />,
     document.getElementById('app')
 );

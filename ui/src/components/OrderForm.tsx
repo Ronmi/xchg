@@ -11,7 +11,7 @@ interface State {
 
 interface Props {
     submitOrder: (order: OrderData) => void;
-    error?: (msg: string) => void;
+    formatError?: () => void;
 }
 
 export default class OrderForm extends React.Component<Props, State> {
@@ -94,7 +94,7 @@ export default class OrderForm extends React.Component<Props, State> {
         e.preventDefault();
         let data = this.validateForm();
         if (data === null) {
-            this.props.error("格式錯誤");
+            this.props.formatError();
             return;
         }
 

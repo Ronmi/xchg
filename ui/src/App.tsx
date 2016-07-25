@@ -14,7 +14,7 @@ function sorter(a: OrderData, b: OrderData): number {
 
 interface Props {
     api: API;
-    errHandler: (msg: string) => void;
+    alert: (msg: string) => void;
 }
 
 interface State {
@@ -42,7 +42,7 @@ export default class App extends React.Component<Props, State> {
                     this.codeSelected(this.state.code).then(() => { res(); }, () => { res(); });
                 },
                 () => {
-                    this.props.errHandler("認證失敗");
+                    this.props.alert("認證失敗");
                     rej();
                 }
             );
@@ -105,13 +105,20 @@ export default class App extends React.Component<Props, State> {
         });
     }
 
+    handlePinFormatError() {
+	this.props.alert("PIN 碼格式錯誤，必須是六位數字");
+    }
+    handleOrderFormatError() {
+	this.props.alert("格式錯誤，請重新確認");
+    }
+
     render() {
         if (!this.state.authed) {
             return (
                 <div>
                     <AuthForm
                         submitPincode={this.submitPincode.bind(this)}
-                        error={this.props.errHandler} />
+                        formatError={this.handlePinFormatError.bind(this)} />
                 </div>
             );
         }
@@ -120,7 +127,7 @@ export default class App extends React.Component<Props, State> {
             <div>
                 <OrderForm
                     submitOrder={this.submitOrder.bind(this)}
-                    error={this.props.errHandler} />
+                    formatError={this.handleOrderFormatError.bind(this)} />
                 <div className="list-type">
                     <CurrencySelector
                         codeSelected={this.codeSelected.bind(this)}
