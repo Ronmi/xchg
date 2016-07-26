@@ -39,6 +39,12 @@ module.exports = {
 	exclude: /node_modules/,
 	query: { presets: ['es2015'], },
       },
+      {
+	test: /\.css/,
+	loader: "style-loader!css-loader",
+	exclude: /css\//,
+      },
+      { test: /\.(ttf|woff|eot|svg)/, loader: "url-loader" },
     ],
 
     preLoaders: [

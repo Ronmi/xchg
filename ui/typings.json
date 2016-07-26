@@ -8,7 +8,8 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "enzyme": "registry:npm/enzyme#2.2.0+20160322031343"
+    "enzyme": "registry:npm/enzyme#2.2.0+20160322031343",
+    "react-notifications": "file:react-notifications.d.ts"
   },
   "globalDevDependencies": {
     "chai": "registry:dt/chai#3.4.0+20160601211834",
