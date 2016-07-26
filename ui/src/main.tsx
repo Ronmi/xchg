@@ -2,10 +2,18 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import App from "./App";
 import { ByJquery } from "./API";
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 
 let api = new ByJquery();
+let err = function(msg: string) {
+    NotificationManager.error(msg);
+};
 
 ReactDOM.render(
-    <App api={api} alert={alert} />,
+    <div>
+	<App api={api} alert={err} />
+	<NotificationContainer />
+    </div>,
     document.getElementById('app')
 );
