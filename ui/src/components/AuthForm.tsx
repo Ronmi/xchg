@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Bind } from "../types";
 
 interface Props {
     submitPincode: (pin: string) => void; // callback
@@ -9,6 +10,7 @@ interface State {
     pin: string;
 }
 
+@Bind("handleSubmit", "handleChange")
 export default class AuthForm extends React.Component<Props, State> {
     constructor(props?: Props, context?: any) {
         super(props, context);
@@ -17,12 +19,12 @@ export default class AuthForm extends React.Component<Props, State> {
 
     render() {
         return (
-            <form onSubmit={this.handleSubmit.bind(this)}>
+            <form onSubmit={this.handleSubmit}>
                 <fieldset>
                     <legend>使用者認證</legend>
                     <label htmlFor="pin">
                         <span>PIN</span>
-                        <input name="pin" type="text" onChange={this.handleChange.bind(this)} placeholder="6 碼數字" />
+                        <input name="pin" type="text" onChange={this.handleChange} placeholder="6 碼數字" />
                     </label>
                     <button type="submit">送出</button>
                 </fieldset>

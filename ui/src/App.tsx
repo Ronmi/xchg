@@ -1,7 +1,7 @@
 /// <reference path="../typings/globals/es6-shim/index.d.ts" />
 
 import * as React from "react";
-import { OrderData, translate } from "./types";
+import { OrderData, translate, Bind } from "./types";
 import AuthForm from "./components/AuthForm";
 import OrderForm from "./components/OrderForm";
 import CurrencySelector from "./components/CurrencySelector";
@@ -23,6 +23,13 @@ interface State {
     data?: OrderData[];
 }
 
+@Bind(
+    "submitPincode",
+    "submitOrder",
+    "codeSelected",
+    "handlePinFormatError",
+    "handleOrderFormatError"
+)
 export default class App extends React.Component<Props, State> {
     constructor(props?: any, context?: any) {
         super(props, context);
@@ -35,6 +42,7 @@ export default class App extends React.Component<Props, State> {
 
     // custom event handlers, returns promise so we can test on it
     submitPincode(pin: string): Promise<void> {
+	console.log(this);
         return new Promise<void>((res, rej) => {
             this.props.api.Auth(pin).then(
                 () => {
@@ -117,8 +125,8 @@ export default class App extends React.Component<Props, State> {
             return (
                 <div>
                     <AuthForm
-                        submitPincode={this.submitPincode.bind(this)}
-                        formatError={this.handlePinFormatError.bind(this)} />
+                        submitPincode={this.submitPincode}
+                        formatError={this.handlePinFormatError} />
                 </div>
             );
         }
@@ -126,11 +134,11 @@ export default class App extends React.Component<Props, State> {
         return (
             <div>
                 <OrderForm
-                    submitOrder={this.submitOrder.bind(this)}
-                    formatError={this.handleOrderFormatError.bind(this)} />
+                    submitOrder={this.submitOrder}
+                    formatError={this.handleOrderFormatError} />
                 <div className="list-type">
                     <CurrencySelector
-                        codeSelected={this.codeSelected.bind(this)}
+                        codeSelected={this.codeSelected}
                         defaultLabel="全部"
                         defaultValue="ALL" />
                 </div>

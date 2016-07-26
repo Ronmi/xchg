@@ -1,5 +1,5 @@
 import * as React from "react";
-import { OrderData, translate } from "../types";
+import { OrderData, translate, Bind } from "../types";
 import CurrencySelector from "./CurrencySelector";
 
 interface State {
@@ -14,6 +14,13 @@ interface Props {
     formatError?: () => void;
 }
 
+@Bind(
+    "setWhen",
+    "setLocal",
+    "setForeign",
+    "setCode",
+    "handleSubmit"
+)
 export default class OrderForm extends React.Component<Props, State> {
     constructor(props?: Props, context?: any) {
         super(props, context);
@@ -40,25 +47,25 @@ export default class OrderForm extends React.Component<Props, State> {
 
     render() {
         return (
-            <form onSubmit={this.handleSubmit.bind(this)}>
+            <form onSubmit={this.handleSubmit}>
                 <fieldset>
                     <legend>新增</legend>
                     <label htmlFor="date">
                         <span>交易時間</span>
-                        <input name="when" type="datetime" onChange={this.setWhen.bind(this)} placeholder="年/月/日 時:分:秒"/>
+                        <input name="when" type="datetime" onChange={this.setWhen} placeholder="年/月/日 時:分:秒"/>
                     </label>
                     <label htmlFor="local">
                         <span>成本(買入為負)</span>
-                        <input name="local" type="number" step="0.01" onChange={this.setLocal.bind(this)} />
+                        <input name="local" type="number" step="0.01" onChange={this.setLocal} />
                     </label>
                     <div className="foreign">
                         <label htmlFor="foreign">
                             <span>金額(買入為正)</span>
-                            <input name="foreign" type="number" step="0.01" onChange={this.setForeign.bind(this)} />
+                            <input name="foreign" type="number" step="0.01" onChange={this.setForeign} />
                         </label>
                         <label htmlFor="currency">
                             <span>幣別</span>
-                            <CurrencySelector codeSelected={this.setCode.bind(this)} defaultLabel="請選擇" />
+                            <CurrencySelector codeSelected={this.setCode} defaultLabel="請選擇" />
                         </label>
                     </div>
                     <button type="submit">送出</button>
