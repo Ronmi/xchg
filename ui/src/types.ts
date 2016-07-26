@@ -43,30 +43,3 @@ export function formatNumber(val: number, size: number): string {
 
     return str.substr(0, l - size) + "." + str.substr(l - size, size);
 }
-
-// Bind decorator
-export function Bind(...keys: string[]): (c: any) => any {
-    let make = function(original: any, args: any[]) {
-        let cons: any = function() {
-            return original.apply(this, args);
-        };
-        cons.prototype = original.prototype;
-        return new cons();
-    };
-
-    return function(c: any): any {
-        let name = c.name;
-        let ret: any = function(...args: any[]): any {
-            let obj = make(c, args);
-
-            for (let key of keys) {
-                obj[key] = obj[key].bind(obj);
-            }
-
-            return obj;
-        };
-
-        Object.defineProperty(ret, "name", {value: name});
-        return ret;
-    };
-}

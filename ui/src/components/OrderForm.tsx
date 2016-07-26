@@ -1,5 +1,5 @@
 import * as React from "react";
-import { OrderData, translate, Bind } from "../types";
+import { OrderData, translate } from "../types";
 import CurrencySelector from "./CurrencySelector";
 
 interface State {
@@ -14,13 +14,6 @@ interface Props {
     formatError?: () => void;
 }
 
-@Bind(
-    "setWhen",
-    "setLocal",
-    "setForeign",
-    "setCode",
-    "handleSubmit"
-)
 export default class OrderForm extends React.Component<Props, State> {
     constructor(props?: Props, context?: any) {
         super(props, context);
@@ -32,16 +25,16 @@ export default class OrderForm extends React.Component<Props, State> {
         };
     }
 
-    setWhen(e: Event) {
+    setWhen = (e: Event) => {
         this.setState({ when: (e.target as HTMLInputElement).value });
     }
-    setLocal(e: Event) {
+    setLocal = (e: Event) => {
         this.setState({ local: Number((e.target as HTMLInputElement).value) });
     }
-    setForeign(e: Event) {
+    setForeign = (e: Event) => {
         this.setState({ foreign: Number((e.target as HTMLInputElement).value) });
     }
-    setCode(code: string) {
+    setCode = (code: string) => {
         this.setState({ code: code });
     }
 
@@ -97,7 +90,7 @@ export default class OrderForm extends React.Component<Props, State> {
         };
     }
 
-    handleSubmit(e: Event) {
+    handleSubmit = (e: Event) => {
         e.preventDefault();
         let data = this.validateForm();
         if (data === null) {

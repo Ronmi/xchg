@@ -1,5 +1,5 @@
 import * as React from "react";
-import { T, Bind } from "../types";
+import { T } from "../types";
 
 interface Props {
     codeSelected: (code: string) => void;
@@ -7,21 +7,20 @@ interface Props {
     defaultValue?: string
 }
 
-@Bind("handleChange")
 export default class CurrencySelector extends React.Component<Props, {}> {
     private nodes: JSX.Element[];
 
     constructor(props: Props, context?: any) {
 	super(props, context);
-	
+
 	let nodes = [] as JSX.Element[];
         for (let code in T) {
             nodes[nodes.length] = <option value={code} key={code}>{T[code]}</option>;
         }
 	this.nodes = nodes;
     }
-    
-    handleChange(e: Event) {
+
+    handleChange = (e: Event) => {
         this.props.codeSelected((e.target as HTMLSelectElement).value);
     }
 

@@ -1,7 +1,7 @@
 /// <reference path="../typings/globals/es6-shim/index.d.ts" />
 
 import * as React from "react";
-import { OrderData, translate, Bind } from "./types";
+import { OrderData, translate } from "./types";
 import AuthForm from "./components/AuthForm";
 import OrderForm from "./components/OrderForm";
 import CurrencySelector from "./components/CurrencySelector";
@@ -23,13 +23,6 @@ interface State {
     data?: OrderData[];
 }
 
-@Bind(
-    "submitPincode",
-    "submitOrder",
-    "codeSelected",
-    "handlePinFormatError",
-    "handleOrderFormatError"
-)
 export default class App extends React.Component<Props, State> {
     constructor(props?: any, context?: any) {
         super(props, context);
@@ -41,8 +34,7 @@ export default class App extends React.Component<Props, State> {
     }
 
     // custom event handlers, returns promise so we can test on it
-    submitPincode(pin: string): Promise<void> {
-	console.log(this);
+    submitPincode = (pin: string): Promise<void> => {
         return new Promise<void>((res, rej) => {
             this.props.api.Auth(pin).then(
                 () => {
@@ -56,7 +48,7 @@ export default class App extends React.Component<Props, State> {
             );
         });
     }
-    submitOrder(order: OrderData): Promise<void> {
+    submitOrder = (order: OrderData): Promise<void> => {
         let data = this.state.data.slice(0);
         this.addOrder(order)
         return new Promise<void>((res, rej) => {
@@ -69,7 +61,7 @@ export default class App extends React.Component<Props, State> {
             );
         });
     }
-    codeSelected(code: string): Promise<void> {
+    codeSelected = (code: string): Promise<void> => {
         return this.getOrderList(code);
     }
 
@@ -113,10 +105,10 @@ export default class App extends React.Component<Props, State> {
         });
     }
 
-    handlePinFormatError() {
+    handlePinFormatError = () => {
         this.props.alert("PIN 碼格式錯誤，必須是六位數字");
     }
-    handleOrderFormatError() {
+    handleOrderFormatError = () => {
         this.props.alert("格式錯誤，請重新確認");
     }
 
