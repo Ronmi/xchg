@@ -52,3 +52,18 @@ export function formatNumber(val: number, size: number): string {
 
     return before + "." + after;
 }
+
+function formatTime(t: number): string {
+    if (t < 10) {
+        return "0" + t;
+    }
+    return String(t);
+}
+export function convertTime(t: number): string {
+    let d = new Date(t * 1000);
+    let ret = d.getFullYear() + "/" + formatTime(d.getMonth() + 1) + "/" + formatTime(d.getDate());
+    ret += " " + formatTime(d.getHours());
+    ret += ":" + formatTime(d.getMinutes());
+    ret += ":" + formatTime(d.getSeconds());
+    return ret;
+}

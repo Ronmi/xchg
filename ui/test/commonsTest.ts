@@ -2,7 +2,7 @@
 /// <reference path="../typings/globals/chai/index.d.ts" />
 /// <reference path="../typings/globals/es6-shim/index.d.ts" />
 
-import { formatNumber } from "../src/commons";
+import { formatNumber, convertTime } from "../src/commons";
 
 let expect = chai.expect;
 
@@ -33,6 +33,13 @@ describe("common function", () => {
             // 規避 typescript 檢查
             let str: any = "abc";
             expect(formatNumber(str as number, 4)).to.equal("0.0000");
+        });
+    });
+
+    describe("convertTime", () => {
+        it("converts go timestamp to yyyy/mm/dd hh:ii:ss format", () => {
+            let t = (new Date(2006, 0, 2, 3, 4, 5, 0)).getTime() / 1000;
+            expect(convertTime(t)).to.equal("2006/01/02 03:04:05");
         });
     });
 });

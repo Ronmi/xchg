@@ -1,5 +1,5 @@
 import * as React from "react";
-import { OrderData, translate, formatNumber } from "../commons";
+import { OrderData, translate, formatNumber, convertTime } from "../commons";
 
 interface Props {
     data: OrderData;
@@ -21,7 +21,7 @@ export default class OrderListEntry extends React.Component<Props, {}> {
 
         return (
             <tr>
-                <td className="time">{this.convertTime(this.props.data.when)}</td>
+                <td className="time">{convertTime(this.props.data.when)}</td>
                 <td className="currency">{translate(this.props.data.code)}</td>
                 <td className={foreign}>{formatNumber(this.props.data.foreign, 2)}</td>
                 <td className={local}>{this.props.data.local}</td>
@@ -35,19 +35,4 @@ export default class OrderListEntry extends React.Component<Props, {}> {
             return "negative";
         }
     }
-    formatTime(t: number): string {
-        if (t < 10) {
-            return "0" + t;
-        }
-        return String(t);
-    }
-    convertTime(t: number): string {
-        let d = new Date(t * 1000);
-        let ret = d.getFullYear() + "/" + this.formatTime(d.getMonth() + 1) + "/" + this.formatTime(d.getDate());
-        ret += " " + this.formatTime(d.getHours());
-        ret += ":" + this.formatTime(d.getMinutes());
-        ret += ":" + this.formatTime(d.getSeconds());
-        return ret;
-    }
-
 }
