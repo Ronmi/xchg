@@ -10,6 +10,7 @@
     "tsc:w": "tsc -w",
     "webpack": "webpack",
     "webpack:w": "webpack -w",
+    "webpack:prod": "webpack --config webpack.minify.js",
     "lite": "browser-sync start --config bs-config.js",
     "start": "tsc && webpack && concurrently \"npm run tsc:w\" \"npm run webpack:w\" \"npm run lite\"",
     "karma": "karma start --browsers PhantomJS,Firefox,Chrome",
