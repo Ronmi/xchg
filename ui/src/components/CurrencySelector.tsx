@@ -4,24 +4,32 @@ import { T } from "../commons";
 interface Props {
     codeSelected: (code: string) => void;
     defaultLabel?: string;
-    defaultValue?: string
+    defaultValue?: string;
 }
 
-export default class CurrencySelector extends React.Component<Props, {}> {
+interface State {
+    value?: string
+}
+
+export default class CurrencySelector extends React.Component<Props, State> {
     private nodes: JSX.Element[];
 
     constructor(props: Props, context?: any) {
-	super(props, context);
+        super(props, context);
 
-	let nodes = [] as JSX.Element[];
+        this.state = { value: props.defaultValue };
+
+        let nodes = [] as JSX.Element[];
         for (let code in T) {
             nodes[nodes.length] = <option value={code} key={code}>{T[code]}</option>;
         }
-	this.nodes = nodes;
+        this.nodes = nodes;
     }
 
     handleChange = (e: Event) => {
-        this.props.codeSelected((e.target as HTMLSelectElement).value);
+        let v = (e.target as HTMLSelectElement).value;
+        this.setState({ value: v });
+        this.props.codeSelected(v);
     }
 
     renderDefaultLabel() {
@@ -38,7 +46,7 @@ export default class CurrencySelector extends React.Component<Props, {}> {
 
     render() {
         return (
-            <select name="currency" onChange={this.handleChange} value={this.props.defaultValue}>
+            <select name="currency" onChange={this.handleChange} value={this.state.value}>
                 {this.renderDefaultLabel()}
                 {this.nodes}
             </select>
