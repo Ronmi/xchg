@@ -1,5 +1,5 @@
 import * as React from "react";
-import { OrderData, translate } from "../types";
+import { OrderData, translate } from "../commons";
 import CurrencySelector from "./CurrencySelector";
 
 interface State {

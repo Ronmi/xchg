@@ -1,5 +1,5 @@
 import * as React from "react";
-import { T } from "../types";
+import { T } from "../commons";
 
 interface Props {
     codeSelected: (code: string) => void;

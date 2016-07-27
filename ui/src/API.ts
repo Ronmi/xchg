@@ -1,6 +1,6 @@
 /// <reference path="../typings/globals/es6-shim/index.d.ts" />
 
-import { OrderData } from "./types";
+import { OrderData } from "./commons";
 
 export interface API {
     Auth: (pin: string) => Promise<void>;

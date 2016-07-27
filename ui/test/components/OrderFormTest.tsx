@@ -4,7 +4,7 @@
 import * as React from "react";
 import { shallow } from "enzyme";
 import OrderForm from "../../src/components/OrderForm";
-import { OrderData } from "../../src/types";
+import { OrderData } from "../../src/commons";
 
 // use global chai since karma-chai-sinon registers to global scope
 let expect = chai.expect;

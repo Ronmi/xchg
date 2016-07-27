@@ -2,7 +2,7 @@
 /// <reference path="../typings/globals/chai/index.d.ts" />
 /// <reference path="../typings/globals/es6-shim/index.d.ts" />
 
-import { OrderData } from "../src/types";
+import { OrderData } from "../src/commons";
 
 let expect = chai.expect;
 

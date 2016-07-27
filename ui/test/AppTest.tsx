@@ -5,7 +5,7 @@
 import * as React from "react";
 import { shallow, ShallowWrapper } from "enzyme";
 import App from "../src/App";
-import { OrderData } from "../src/types";
+import { OrderData } from "../src/commons";
 import FakeAPI from "./FakeAPI";
 
 // use global chai since karma-chai-sinon registers to global scope

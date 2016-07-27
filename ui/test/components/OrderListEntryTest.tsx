@@ -4,7 +4,7 @@ import * as React from "react";
 import { shallow } from "enzyme";
 import { expect } from "chai";
 import OrderListEntry from "../../src/components/OrderListEntry";
-import { translate } from "../../src/types";
+import { translate } from "../../src/commons";
 
 describe("<OrderListEntry />", () => {
     const date = "2016/07/21 00:00:00";

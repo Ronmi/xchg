@@ -4,7 +4,7 @@ import * as React from "react";
 import { shallow } from "enzyme";
 import { expect } from "chai";
 import CurrencySelector from "../../src/components/CurrencySelector";
-import { T } from "../../src/types";
+import { T } from "../../src/commons";
 
 function check_option_count(wrapper: any, data: { [key: string]: string }) {
     return () => {

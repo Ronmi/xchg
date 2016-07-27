@@ -1,5 +1,5 @@
 import * as React from "react";
-import { OrderData, translate, formatNumber } from "../types";
+import { OrderData, translate, formatNumber } from "../commons";
 
 interface Props {
     data: OrderData;
