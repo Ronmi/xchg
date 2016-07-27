@@ -1,11 +1,11 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import App from "./App";
-import { ByJquery } from "./API";
+import { ByFetch } from "./API";
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 
-let api = new ByJquery();
+let api = new ByFetch();
 let err = function(msg: string) {
     NotificationManager.error(msg);
 };

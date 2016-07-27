@@ -16,9 +16,6 @@ module.exports = {
       name: "vendor",
       filename: "vendor.js"
     }),
-    new webpack.ProvidePlugin({
-      "$": "jquery",
-    }),
   ],
 
   // Enable sourcemaps for debugging webpack's output.

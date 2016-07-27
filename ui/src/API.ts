@@ -1,4 +1,5 @@
 /// <reference path="../typings/globals/es6-shim/index.d.ts" />
+/// <reference path="../typings/globals/whatwg-fetch/index.d.ts" />
 
 import { OrderData } from "./commons";
 
@@ -11,7 +12,38 @@ export interface API {
 
 export default API;
 
-export class ByJquery implements API {
+function post<T>(url: string, data: any): Promise<T> {
+    return new Promise<T>(function(res, rej) {
+        fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "text/plain",
+                "Accept": "application/json, text/plain",
+            },
+            body: JSON.stringify(data),
+        }).then(
+            function(r: Response) {
+                if (r.status >= 400) {
+                    rej(r.status + " " + r.statusText);
+                }
+
+                r.json<T>().then(
+                    function(data: T) {
+                        res(data);
+                    },
+                    function() {
+                        rej("Not JSON format");
+                    }
+                );
+            },
+            function() {
+                rej("Connection error");
+            }
+            );
+    });
+}
+
+export class ByFetch implements API {
     private token: string;
 
     constructor() {
@@ -20,65 +52,54 @@ export class ByJquery implements API {
 
     Auth(pin: string): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            $.post({
-                url: "/api/auth",
-                data: JSON.stringify({ pin: pin }),
-                processData: false,
-                contentType: "text/plain",
-                dataType: "json"
-            }).done((token: string) => {
-                this.token = token;
-                resolve();
-            }).fail((msg: string) => {
-                reject();
-            });
+            post<string>("/api/auth", { pin: pin }).then(
+                (token: string) => {
+                    this.token = token;
+                    resolve();
+                },
+                (msg: string) => {
+                    reject();
+                }
+            );
         });
     }
 
     Add(data: OrderData): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            $.post({
-                url: "/api/add",
-                data: JSON.stringify({ data: data, token: this.token }),
-                processData: false,
-                contentType: "text/plain; charset=UTF-8",
-                dataType: "json"
-            }).done(() => {
-                resolve();
-            }).fail(() => {
-                reject();
-            });
+            post("/api/add", { data: data, token: this.token }).then(
+                () => {
+                    resolve();
+                },
+                () => {
+                    reject();
+                }
+            );
         });
     }
 
     List(code: string): Promise<OrderData[]> {
         return new Promise<OrderData[]>((resolve, reject) => {
-            $.post({
-                url: "/api/list",
-                data: JSON.stringify({ code: code, token: this.token }),
-                processData: false,
-                contentType: "text/plain",
-                dataType: "json"
-            }).done((data: OrderData[]) => {
-                resolve(data);
-            }).fail(() => {
-                reject();
-            });
+            post("/api/list", { code: code, token: this.token }).then(
+                (data: OrderData[]) => {
+                    resolve(data);
+                },
+                () => {
+                    reject();
+                }
+            );
         });
     }
 
     ListAll(): Promise<OrderData[]> {
         return new Promise<OrderData[]>((resolve, reject) => {
-            $.post({
-                url: "/api/listall",
-                data: JSON.stringify({ token: this.token }),
-                contentType: "text/plain",
-                dataType: "json"
-            }).done((data: OrderData[]) => {
-                resolve(data);
-            }).fail(() => {
-                reject();
-            });
+            post("/api/listall", { token: this.token }).then(
+                (data: OrderData[]) => {
+                    resolve(data);
+                },
+                () => {
+                    reject();
+                }
+            );
         });
     }
 };
