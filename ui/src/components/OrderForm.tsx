@@ -1,5 +1,5 @@
 import * as React from "react";
-import { OrderData, translate } from "../commons";
+import { OrderData, translate, convertTime } from "../commons";
 import CurrencySelector from "./CurrencySelector";
 
 interface State {
@@ -37,6 +37,9 @@ export default class OrderForm extends React.Component<Props, State> {
     setCode = (code: string) => {
         this.setState({ code: code });
     }
+    updateTime = () => {
+	this.setState({when: convertTime((new Date()).getTime()/1000)});
+    }
 
     render() {
         return (
@@ -44,8 +47,8 @@ export default class OrderForm extends React.Component<Props, State> {
                 <fieldset>
                     <legend>新增</legend>
                     <label htmlFor="date">
-                        <span>交易時間</span>
-                        <input name="when" type="datetime" onChange={this.setWhen} placeholder="年/月/日 時:分:秒"/>
+                        <span>交易時間 <span onClick={this.updateTime}>(NOW)</span></span>
+                        <input name="when" type="datetime" onChange={this.setWhen} value={this.state.when} placeholder="年/月/日 時:分:秒"/>
                     </label>
                     <label htmlFor="local">
                         <span>成本(買入為負)</span>
