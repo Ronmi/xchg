@@ -28,18 +28,27 @@ export function translate(code: string): string {
 }
 
 export function formatNumber(val: number, size: number): string {
+    if (isNaN(Math.abs(val))) {
+        val = 0;
+    }
     size = Math.floor(Math.abs(size));
     let x = Math.pow(10, size);
-    let str = Math.round(val * x) + "";
+    let str = Math.round(Math.abs(val) * x) + "";
 
     while (str.length < size) {
         str = "0" + str;
     }
 
     let l = str.length;
-    if (l === size) {
-        return "0." + str;
+    let before = str.substr(0, l - size);
+    let after = str.substr(l - size, size);
+
+    if (before.length === 0) {
+        before = "0";
+    }
+    if (val < 0) {
+        before = "-" + before;
     }
 
-    return str.substr(0, l - size) + "." + str.substr(l - size, size);
+    return before + "." + after;
 }
