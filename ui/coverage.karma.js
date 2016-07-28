@@ -77,15 +77,15 @@ module.exports = function(config) {
     reporters: ['mocha', 'coverage', 'karma-remap-istanbul'],
 
     coverageReporter: {
-      dir: 'coverage',
+      dir: './coverage',
       reporters: [
 	{ type: 'json', subdir: '.' },
       ],
     },
     remapIstanbulReporter: {
-      src: 'coverage/coverage-final.json',
+      src: './coverage/coverage-final.json',
       reports: {
-    	html: 'coverage',
+    	html: './coverage',
     	text: null,
       },
     },

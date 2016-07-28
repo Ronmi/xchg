@@ -15,7 +15,7 @@
     "start": "tsc && webpack && concurrently \"npm run tsc:w\" \"npm run webpack:w\" \"npm run lite\"",
     "karma": "karma start --browsers PhantomJS,Firefox,Chrome",
     "coverage": "tsc && karma start coverage.karma.js",
-    "travis": "npm run coverage",
+    "travis": "mkdir -p coverage && touch coverage/coverage-final.json && npm run coverage",
     "test": "rm -fr build && tsc && find build/test -name '*.js' -type f | xargs mocha -r es6-shim mocha.bootstrap.js"
   },
   "author": "Ronmi Ren <ronmi.ren@gmail.com>",
