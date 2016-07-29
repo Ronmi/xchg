@@ -7,16 +7,8 @@ interface Props {
 
 export default class OrderListEntry extends React.Component<Props, {}> {
     render() {
-        let foreign = this.isNegClass(this.props.data.foreign);
-        if (foreign !== "") {
-            foreign += " ";
-        }
-        foreign += "foreign";
-        let local = this.isNegClass(this.props.data.local);
-        if (local !== "") {
-            local += " ";
-        }
-        local += "local";
+        let foreign = this.forgeClass("foreign", this.props.data.foreign);
+        let local = this.forgeClass("local", this.props.data.local);
         let rate = -this.props.data.local / this.props.data.foreign;
 
         return (
@@ -30,10 +22,10 @@ export default class OrderListEntry extends React.Component<Props, {}> {
         );
     }
 
-    isNegClass(val: number): string {
+    forgeClass(cls: string, val: number): string {
         if (val < 0) {
-            return "negative";
+            return cls + " negative";
         }
-	return "";
+	return cls;
     }
 }
