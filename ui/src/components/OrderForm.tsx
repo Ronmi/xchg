@@ -29,10 +29,10 @@ export default class OrderForm extends React.Component<Props, State> {
         this.setState({ when: (e.target as HTMLInputElement).value });
     }
     setLocal = (e: Event) => {
-        this.setState({ local: Number((e.target as HTMLInputElement).value) });
+        this.setState({ local: Number((e.target as HTMLInputElement).value) || 0 });
     }
     setForeign = (e: Event) => {
-        this.setState({ foreign: Number((e.target as HTMLInputElement).value) });
+        this.setState({ foreign: Number((e.target as HTMLInputElement).value) || 0 });
     }
     setCode = (code: string) => {
         this.setState({ code: code });
