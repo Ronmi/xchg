@@ -15,11 +15,7 @@ export const T = {
 
 export function translate(code: string): string {
     let ret: string;
-    try {
-        ret = T[code];
-    } catch (e) {
-        return code;
-    }
+    ret = T[code];
 
     if (!ret) {
         return code;

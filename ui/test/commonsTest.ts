@@ -2,7 +2,7 @@
 /// <reference path="../typings/globals/chai/index.d.ts" />
 /// <reference path="../typings/globals/es6-shim/index.d.ts" />
 
-import { formatNumber, convertTime } from "../src/commons";
+import { formatNumber, convertTime, translate } from "../src/commons";
 
 let expect = chai.expect;
 
@@ -40,6 +40,18 @@ describe("common function", () => {
         it("converts go timestamp to yyyy/mm/dd hh:ii:ss format", () => {
             let t = (new Date(2006, 0, 2, 3, 4, 5, 0)).getTime() / 1000;
             expect(convertTime(t)).to.equal("2006/01/02 03:04:05");
+        });
+    });
+
+    describe("translate", () => {
+        it("translates supported currency code to its name", () => {
+            expect(translate("USD")).to.equal("美元");
+        });
+        it("returns the code if not supported", () => {
+            expect(translate("fail")).to.equal("fail");
+            expect(translate("")).to.equal("");
+            expect(translate("1")).to.equal("1");
+            expect(translate("usd")).to.equal("usd");
         });
     });
 });
