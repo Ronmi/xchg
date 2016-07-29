@@ -28,8 +28,14 @@ let helper = {
         }
         return wrapper.find("AuthForm").prop("submitPincode")(pin);
     },
+    emitPincodeError: function(wrapper: any): Promise<void> {
+        return wrapper.find("AuthForm").prop("formatError")();
+    },
     emitOrder: function(wrapper: any, order: OrderData): Promise<void> {
         return wrapper.find("OrderForm").prop("submitOrder")(order);
+    },
+    emitOrderError: function(wrapper: any): Promise<void> {
+        return wrapper.find("OrderForm").prop("formatError")();
     },
     emitCode: function(wrapper: any, code?: string): Promise<void> {
         if (code === undefined) {
@@ -121,19 +127,48 @@ describe("<App />", () => {
             api.will.success();
             let wrapper = shallow(<App api={api} alert={() => { } } />);
             helper.emitPincode(wrapper).then(
-                check(done, () => {
+                () => {
                     wrapper.update();
                     api.fakeData = [order];
                     helper.emitOrder(wrapper, order).then(
-                        () => {
+                        check(done, () => {
                             expect(api.fakeData).to.deep.equal(wrapper.state("data"));
-                        },
+                        }),
                         () => { done(new Error("Unexpected error occurs with api.Add")); }
                     );
-                }),
+                },
                 () => { done(new Error("Unexpected error occurs with api.Auth")); }
             );
         });
+	it("will not update order list if new data does not belong to current category", (done) => {
+            let order = { when: 1, local: -1, foreign: 1, code: "USD" }
+            let api = new FakeAPI();
+            api.will.success();
+	    api.fakeData = [{ when: 1, local: -1, foreign: 1, code: "JPY" }];
+            let wrapper = shallow(<App api={api} alert={() => { } } />);
+
+	    // login
+            helper.emitPincode(wrapper).then(
+		() => {
+		    wrapper.update();
+		    // select to JPY
+		    helper.emitCode(wrapper, "JPY").then(
+			() => {
+			    wrapper.update();
+			    helper.emitOrder(wrapper, order).then(
+				check(done, () => {
+				    wrapper.update();
+				    expect(api.fakeData).to.deep.equal(wrapper.state("data"));
+				}),
+				() => { done(new Error("Unexpected error occurs with api.Add")); }
+			    );
+			},
+			() => { done(new Error("Unexpected error occurs with emitting codeSelected")); }
+		    );
+		},
+                () => { done(new Error("Unexpected error occurs with api.Auth")); }
+            );
+	});
         it("remains old order list data if failed to add data", (done) => {
             let order = { when: 1, local: -1, foreign: 1, code: "USD" }
             let api = new FakeAPI();
@@ -176,5 +211,29 @@ describe("<App />", () => {
                 () => { done(new Error("Unexpected error occurs with api.Auth")); }
             );
         });
+    });
+
+    describe("error handling", () => {
+	it("shows message when pin format error", () => {
+	    let spy = sinon.spy();
+	    let wrapper = shallow(<App api={new FakeAPI()} alert={spy} />);
+	    helper.emitPincodeError(wrapper);
+	    expect(spy).has.been.calledOnce;
+	});
+	it("shows message when order format error", (done) => {
+	    let spy = sinon.spy();
+	    let api = new FakeAPI();
+	    let wrapper = shallow(<App api={api} alert={spy} />);
+
+	    // login
+	    helper.emitPincode(wrapper).then(
+		check(done, () => {
+		    wrapper.update();
+		    helper.emitOrderError(wrapper);
+		    expect(spy).has.been.calledOnce;
+		}),
+		() => { done(new Error("Unexpected error occurs with api.Auth")); }
+	    );
+	});
     });
 });
