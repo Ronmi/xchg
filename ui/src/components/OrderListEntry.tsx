@@ -34,5 +34,6 @@ export default class OrderListEntry extends React.Component<Props, {}> {
         if (val < 0) {
             return "negative";
         }
+	return "";
     }
 }

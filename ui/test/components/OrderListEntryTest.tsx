@@ -9,16 +9,18 @@ import { translate } from "../../src/commons";
 describe("<OrderListEntry />", () => {
     const date = "2016/07/21 00:00:00";
     let d = new Date(date);
-    let data = { when: d.getTime() / 1000, local: -3300, foreign: 100, code: "USD" };
-    let wrapper = shallow(<OrderListEntry data={data} />);
 
     it("has a tr with 5 td.", () => {
+	let data = { when: d.getTime() / 1000, local: -3300, foreign: 100, code: "USD" };
+	let wrapper = shallow(<OrderListEntry data={data} />);
         expect(wrapper.find("tr")).to.have.length(1);
         expect(wrapper.find("td")).to.have.length(5);
         expect(wrapper.find("tr td")).to.have.length(5);
     });
 
     describe("time column", () => {
+	let data = { when: d.getTime() / 1000, local: -3300, foreign: 100, code: "USD" };
+	let wrapper = shallow(<OrderListEntry data={data} />);
         let t = wrapper.find("td.time");
 
         it("exists.", () => {
@@ -30,6 +32,8 @@ describe("<OrderListEntry />", () => {
     });
 
     describe("currency name", () => {
+	let data = { when: d.getTime() / 1000, local: -3300, foreign: 100, code: "USD" };
+	let wrapper = shallow(<OrderListEntry data={data} />);
         let t = wrapper.find("td.currency");
 
         it("exists.", () => {
@@ -41,6 +45,8 @@ describe("<OrderListEntry />", () => {
     });
 
     describe("foreign currency column", () => {
+	let data = { when: d.getTime() / 1000, local: -3300, foreign: 100, code: "USD" };
+	let wrapper = shallow(<OrderListEntry data={data} />);
         let t = wrapper.find("td.foreign");
 
         it("exists.", () => {
@@ -49,23 +55,34 @@ describe("<OrderListEntry />", () => {
         it("contains correct number.", () => {
             expect(t.text()).to.equal("100.00");
         });
+	it("adds 'negative' class to the style if value < 0", () => {
+	    let data = { when: d.getTime() / 1000, local: 3300, foreign: -100, code: "USD" };
+	    let wrapper = shallow(<OrderListEntry data={data} />);
+	    expect(wrapper.find("td.foreign").hasClass("negative")).to.be.true;
+	});
     });
 
     describe("local currency column", () => {
+	let data = { when: d.getTime() / 1000, local: 3300, foreign: -100, code: "USD" };
+	let wrapper = shallow(<OrderListEntry data={data} />);
         let t = wrapper.find("td.local");
 
         it("exists.", () => {
             expect(t).to.have.length(1);
         });
         it("contains correct number.", () => {
-            expect(t.text()).to.equal("-3300");
+            expect(t.text()).to.equal("3300");
         });
-        it("denotes a negative number.", () => {
-            expect(t.hasClass("negative")).to.be.true;
-        });
+	it("adds 'negative' class to the style if value < 0", () => {
+	    let data = { when: d.getTime() / 1000, local: -3300, foreign: 100, code: "USD" };
+	    let wrapper = shallow(<OrderListEntry data={data} />);
+	    expect(wrapper.find("td.local").hasClass("negative")).to.be.true;
+	});
     });
 
     describe("exchange rate column", () => {
+	let data = { when: d.getTime() / 1000, local: -3300, foreign: 100, code: "USD" };
+	let wrapper = shallow(<OrderListEntry data={data} />);
         let t = wrapper.find("td.rate");
 
         it("exists.", () => {
