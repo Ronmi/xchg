@@ -4,7 +4,7 @@
 import * as React from "react";
 import { shallow } from "enzyme";
 import OrderForm from "../../src/components/OrderForm";
-import { OrderData } from "../../src/commons";
+import { OrderData, convertTime } from "../../src/commons";
 
 // use global chai since karma-chai-sinon registers to global scope
 let expect = chai.expect;
@@ -38,6 +38,10 @@ describe("<OrderForm />", () => {
     });
     it("has a submit button to submit the order", () => {
         expect(wrapper.find('button[type="submit"]')).to.have.length(1);
+    });
+    it("updates to current time when you click on the NOW tag", () => {
+	wrapper.find("span.now").simulate("click", {preventDefault: () => {}});
+	expect(wrapper.find('input[name="when"]').prop("value")).to.not.equal("");
     });
 
     describe("submitOrder event", () => {

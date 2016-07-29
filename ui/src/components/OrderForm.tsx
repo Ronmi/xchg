@@ -47,7 +47,7 @@ export default class OrderForm extends React.Component<Props, State> {
                 <fieldset>
                     <legend>新增</legend>
                     <label htmlFor="date">
-                        <span>交易時間 <span onClick={this.updateTime}>(NOW)</span></span>
+                        <span>交易時間 <span className="now" onClick={this.updateTime}>(NOW)</span></span>
                         <input name="when" type="datetime" onChange={this.setWhen} value={this.state.when} placeholder="年/月/日 時:分:秒"/>
                     </label>
                     <label htmlFor="local">
