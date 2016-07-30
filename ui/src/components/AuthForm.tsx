@@ -15,6 +15,8 @@ export default class AuthForm extends React.Component<Props, State> {
         this.state = { pin: "" };
     }
 
+    private input: HTMLInputElement;
+
     render() {
         return (
             <form onSubmit={this.handleSubmit}>
@@ -22,12 +24,16 @@ export default class AuthForm extends React.Component<Props, State> {
                     <legend>使用者認證</legend>
                     <label htmlFor="pin">
                         <span>PIN</span>
-                        <input name="pin" type="text" onChange={this.handleChange} placeholder="6 碼數字" />
+                        <input ref={(c) => { this.input = c; } } name="pin" type="text" onChange={this.handleChange} placeholder="6 碼數字" />
                     </label>
                     <button type="submit">送出</button>
                 </fieldset>
             </form>
         );
+    }
+
+    componentDidMount() {
+        this.input.focus();
     }
 
     handleChange = (e: Event) => {
