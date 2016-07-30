@@ -16,6 +16,9 @@ export default class AuthForm extends React.Component<Props, State> {
     }
 
     private input: HTMLInputElement;
+    private setInput = (e: HTMLInputElement) => {
+	this.input = e;
+    };
 
     render() {
         return (
@@ -24,7 +27,7 @@ export default class AuthForm extends React.Component<Props, State> {
                     <legend>使用者認證</legend>
                     <label htmlFor="pin">
                         <span>PIN</span>
-                        <input ref={(c) => { this.input = c; } } name="pin" type="text" onChange={this.handleChange} placeholder="6 碼數字" />
+                        <input ref={this.setInput} name="pin" type="text" onChange={this.handleChange} placeholder="6 碼數字" />
                     </label>
                     <button type="submit">送出</button>
                 </fieldset>
