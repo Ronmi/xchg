@@ -26,6 +26,7 @@
 - [語意清晰的效果](https://github.com/Ronmi/xchg/commit/5cc64d994788ef7e06bcbc96a97b7b9fa9c8580e)
 - [pure-render anti-pattern，以及為 Component class 寫 decorator 的小技巧](https://github.com/Ronmi/xchg/commit/b2183bedab61f533c717df7c2fde2361da4362ea)
 - [為什麼上面的小技巧是錯誤的做法](https://github.com/Ronmi/xchg/commit/1eda5887547846cf66b81b844bac4bfaa2168d06)
+- [不要破壞自己對函式定義的信任](https://github.com/Ronmi/xchg/commit/2191d550c6da1507706a5c5703ae519da35f5512)
 
 - [merge 的好習慣](https://github.com/Ronmi/xchg/commit/56fbcea41fdeb6a27fda54b1b8ba7fe249bfa733)
 
