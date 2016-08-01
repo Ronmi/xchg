@@ -1,4 +1,3 @@
-/// <reference path="../typings/globals/es6-shim/index.d.ts" />
 /// <reference path="../typings/globals/whatwg-fetch/index.d.ts" />
 
 import { OrderData } from "./commons";

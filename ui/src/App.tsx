@@ -1,5 +1,3 @@
-/// <reference path="../typings/globals/es6-shim/index.d.ts" />
-
 import * as React from "react";
 import { OrderData, translate } from "./commons";
 import AuthForm from "./components/AuthForm";
