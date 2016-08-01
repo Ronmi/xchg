@@ -21,8 +21,7 @@
   "author": "Ronmi Ren <ronmi.ren@gmail.com>",
   "license": "GPL-3.0",
   "dependencies": {
-    "es5-shim": "^4.5.9",
-    "es6-shim": "^0.35.1",
+    "babel-polyfill": "^6.9.1",
     "react": "^15.2.1",
     "react-dom": "^15.2.1",
     "whatwg-fetch": "^1.0.0"

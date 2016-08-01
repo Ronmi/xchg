@@ -10,11 +10,12 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha', 'chai-sinon', 'es5-shim', 'es6-shim'],
+    frameworks: ['mocha', 'chai-sinon'],
 
 
     // list of files / patterns to load in the browser
     files: [
+      'node_modules/babel-polyfill/dist/polyfill.js',
       'test/**/*Test.+(ts|tsx)',
     ],
 
@@ -41,7 +42,7 @@ module.exports = function(config) {
       module: {
 	loaders: [
 	  // All files with a '.ts' or '.tsx' extension will be handled by 'ts-loader'.
-	  { test: /\.tsx?$/, loader: "ts-loader", exclude: /node_modules/ },
+	  { test: /\.tsx?$/, loader: "babel-loader?presets[]=es2015!ts-loader", exclude: /node_modules/ },
 
 	  // https://github.com/airbnb/enzyme/issues/47
 	  { test: /\.json$/, loader: 'json' }
@@ -59,8 +60,6 @@ module.exports = function(config) {
     },
 
     plugins: [
-      'karma-es5-shim',
-      'karma-es6-shim',
       'karma-sourcemap-loader',
       'karma-webpack',
       'karma-firefox-launcher',

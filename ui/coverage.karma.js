@@ -10,10 +10,11 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha', 'chai-sinon', 'es5-shim', 'es6-shim'],
+    frameworks: ['mocha', 'chai-sinon'],
 
     // list of files / patterns to load in the browser
     files: [
+      'node_modules/babel-polyfill/dist/polyfill.js',
       './build/test/**/*Test.js'
     ],
 
@@ -35,6 +36,12 @@ module.exports = function(config) {
       },
       module: {
 	loaders: [
+	  {
+	    test: /\.js/,
+	    loader: "babel-loader",
+	    exclude: /node_modules/,
+	    query: { presets: ['es2015'], },
+	  },
 	  // https://github.com/airbnb/enzyme/issues/47
 	  { test: /\.json$/, loader: 'json' },
 	  {
@@ -63,8 +70,6 @@ module.exports = function(config) {
       'karma-mocha-reporter',
       'karma-coverage',
       'karma-remap-istanbul',
-      'karma-es5-shim',
-      'karma-es6-shim',
       'karma-sourcemap-loader',
       'karma-webpack',
       'karma-firefox-launcher',
