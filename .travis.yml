@@ -11,7 +11,7 @@ before_script:
 script:
   - go test -v ./cmd/...
   - node -v
-  - cd ui ; npm i && npm prune && npm run travis
+  - cd ui ; npm i && npm prune && npm run typings prune && npm run travis
 
 cache:
   directories:
