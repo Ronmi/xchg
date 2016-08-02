@@ -7,7 +7,6 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "chai-as-promised": "registry:npm/chai-as-promised#5.1.0+20160310030142",
     "enzyme": "registry:npm/enzyme#2.2.0+20160322031343",
     "react-notifications": "file:react-notifications.d.ts"
   },
