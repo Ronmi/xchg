@@ -13,63 +13,59 @@ describe("API mock", () => {
             { when: 1, local: -1, foreign: 1, code: "USD" },
         ];
         api.will.success();
-        it("runs Auth() successfuly", (done) => {
-            api.Auth("").then(
-                () => { done(); },
-                () => { throw "error"; }
-            );
+        it("runs Auth() successfuly", () => {
+            return api.Auth("");
         });
-        it("runs Add() successfuly", (done) => {
-            api.Add({ when: 0, foreign: 1, local: -1, code: "USD" }).then(
-                () => { done(); },
-                () => { throw "error"; }
-            );
+        it("runs Add() successfuly", () => {
+            return api.Add({ when: 0, foreign: 1, local: -1, code: "USD" });
         });
-        it("runs List() successfuly and returns the fake data", (done) => {
-            api.List("USD").then(
-                (data: OrderData[]) => {
-                    expect(data).to.deep.equal(api.fakeData);
-                    done();
-                },
-                () => { throw "error"; }
-            );
+        it("runs List() successfuly and returns the fake data", async () => {
+            let data = await api.List("USD");
+            expect(data).to.deep.equal(api.fakeData);
         });
-        it("runs ListAll() successfuly and returns the fake data", (done) => {
-            api.ListAll().then(
-                (data: OrderData[]) => {
-                    expect(data).to.deep.equal(api.fakeData);
-                    done();
-                },
-                () => { throw "error"; }
-            );
+        it("runs ListAll() successfuly and returns the fake data", async () => {
+            let data = await api.ListAll();
+            expect(data).to.deep.equal(api.fakeData);
         });
     });
     describe("with fail()", () => {
         let api = new FakeAPI();
         api.will.fail();
-        it("fails to run Auth()", (done) => {
-            api.Auth("").then(
-                () => { throw "error"; },
-                () => { done(); }
-            );
+        it("fails to run Auth()", async () => {
+            try {
+                await api.Auth("");
+            } catch (e) {
+                return;
+            }
+
+            throw "this should fail";
         });
-        it("fails to run Add()", (done) => {
-            api.Add({ when: 0, foreign: 1, local: -1, code: "USD" }).then(
-                () => { throw "error"; },
-                () => { done(); }
-            );
+        it("fails to run Add()", async () => {
+            try {
+                await api.Add({ when: 0, foreign: 1, local: -1, code: "USD" });
+            } catch (e) {
+                return;
+            }
+
+            throw "this should fail";
         });
-        it("fails to run List()", (done) => {
-            api.List("USD").then(
-                () => { throw "error"; },
-                () => { done(); }
-            );
+        it("fails to run List()", async () => {
+            try {
+                await api.List("USD");
+            } catch (e) {
+                return;
+            }
+
+            throw "this should fail";
         });
-        it("fails to run ListAll()", (done) => {
-            api.ListAll().then(
-                () => { throw "error"; },
-                () => { done(); }
-            );
+        it("fails to run ListAll()", async () => {
+            try {
+                await api.ListAll();
+            } catch (e) {
+                return;
+            }
+
+            throw "this should fail";
         });
     });
 });
