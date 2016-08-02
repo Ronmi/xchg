@@ -1,7 +1,7 @@
 {
   "globalDependencies": {
     "mocha": "registry:dt/mocha#2.2.5+20160720003353",
-    "react": "registry:dt/react#0.14.0+20160720060442",
+    "react": "registry:dt/react#0.14.0+20160801203155",
     "react-dom": "registry:dt/react-dom#0.14.0+20160412154040",
     "whatwg-fetch": "registry:dt/whatwg-fetch#0.0.0+20160728142841"
   },
