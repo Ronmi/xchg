@@ -19,40 +19,32 @@ export default class FakeAPI {
         this.shouldResolve = false;
     }
 
-    Auth(pin: string): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
-            if (this.shouldResolve) {
-                resolve();
-                return;
-            }
-            reject();
-        });
+    async Auth(pin: string): Promise<void> {
+        if (this.shouldResolve) {
+            return;
+        }
+
+        throw "this should fail";
     }
-    Add(data: OrderData): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
-            if (this.shouldResolve) {
-                resolve();
-                return;
-            }
-            reject();
-        });
+    async Add(data: OrderData): Promise<void> {
+        if (this.shouldResolve) {
+            return;
+        }
+
+        throw "this should fail";
     }
-    List(code: string): Promise<OrderData[]> {
-        return new Promise<OrderData[]>((resolve, reject) => {
-            if (this.shouldResolve) {
-                resolve(this.fakeData);
-                return;
-            }
-            reject();
-        });
+    async List(code: string): Promise<OrderData[]> {
+        if (this.shouldResolve) {
+            return this.fakeData;
+        }
+
+        throw "this should fail";
     }
-    ListAll(): Promise<OrderData[]> {
-        return new Promise<OrderData[]>((resolve, reject) => {
-            if (this.shouldResolve) {
-                resolve(this.fakeData);
-                return;
-            }
-            reject();
-        });
+    async ListAll(): Promise<OrderData[]> {
+        if (this.shouldResolve) {
+            return this.fakeData;
+        }
+
+        throw "this should fail";
     }
 }
