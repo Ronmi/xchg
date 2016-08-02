@@ -32,35 +32,31 @@ export default class App extends React.Component<Props, State> {
     }
 
     // custom event handlers, returns promise so we can test on it
-    submitPincode = (pin: string): Promise<void> => {
-        return new Promise<void>((res, rej) => {
-            this.props.api.Auth(pin).then(
-                () => {
-                    this.setState({ authed: true });
-                    this.codeSelected(this.state.code).then(() => { res(); }, () => { res(); });
-                },
-                () => {
-                    this.props.alert("認證失敗");
-                    rej();
-                }
-            );
-        });
+    submitPincode = async (pin: string): Promise<void> => {
+        try {
+	    await this.props.api.Auth(pin);
+            this.setState({ authed: true });
+	    try {
+		await this.codeSelected(this.state.code);
+	    } catch (e) {
+	    }
+	} catch (e) {
+            this.props.alert("認證失敗");
+	    throw e;
+        }
     }
-    submitOrder = (order: OrderData): Promise<void> => {
+    submitOrder = async (order: OrderData): Promise<void> => {
         let data = this.state.data.slice(0);
         this.addOrder(order)
-        return new Promise<void>((res, rej) => {
-            this.props.api.Add(order).then(
-                () => { res(); },
-                () => {
-                    this.setState({ data: data });
-                    rej();
-                }
-            );
-        });
+        try {
+	    await this.props.api.Add(order);
+	} catch (e) {
+            this.setState({ data: data });
+	    throw e;
+        }
     }
-    codeSelected = (code: string): Promise<void> => {
-        return this.getOrderList(code);
+    codeSelected = async (code: string): Promise<void> => {
+        return await this.getOrderList(code);
     }
 
     // helper methods
@@ -74,33 +70,19 @@ export default class App extends React.Component<Props, State> {
         data.sort(sorter);
         this.setState({ data: data });
     }
-    getOrderList(code: string): Promise<void> {
+    async getOrderList(code: string): Promise<void> {
         if (code == translate(code)) {
             return this.getAllOrderList();
         }
 
-        return new Promise<void>((res, rej) => {
-            this.props.api.List(code).then(
-                (data: OrderData[]) => {
-                    data.sort(sorter);
-                    this.setState({ code: code, data: data });
-                    res();
-                },
-                () => { rej(); }
-            );
-        });
+        let data = await this.props.api.List(code);
+        data.sort(sorter);
+        this.setState({ code: code, data: data });
     }
-    getAllOrderList(): Promise<void> {
-        return new Promise<void>((res, rej) => {
-            this.props.api.ListAll().then(
-                (data: OrderData[]) => {
-                    data.sort(sorter);
-                    this.setState({ code: "", data: data });
-                    res();
-                },
-                () => { rej(); }
-            );
-        });
+    async getAllOrderList(): Promise<void> {
+        let data = await this.props.api.ListAll();
+        data.sort(sorter);
+        this.setState({ code: "", data: data });
     }
 
     handlePinFormatError = () => {

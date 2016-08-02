@@ -11,35 +11,21 @@ export interface API {
 
 export default API;
 
-function post<T>(url: string, data: any): Promise<T> {
-    return new Promise<T>(function(res, rej) {
-        fetch(url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "text/plain",
-                "Accept": "application/json, text/plain",
-            },
-            body: JSON.stringify(data),
-        }).then(
-            function(r: Response) {
-                if (r.status >= 400) {
-                    rej(r.status + " " + r.statusText);
-                }
-
-                r.json<T>().then(
-                    function(data: T) {
-                        res(data);
-                    },
-                    function() {
-                        rej("Not JSON format");
-                    }
-                );
-            },
-            function() {
-                rej("Connection error");
-            }
-            );
+async function post<T>(url: string, data: any): Promise<T> {
+    let r = await fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "text/plain",
+            "Accept": "application/json, text/plain",
+        },
+        body: JSON.stringify(data),
     });
+
+    if (r.status >= 400) {
+        throw r.status + " " + r.statusText;
+    }
+
+    return await r.json<T>();
 }
 
 export class ByFetch implements API {
@@ -49,56 +35,19 @@ export class ByFetch implements API {
         this.token = "";
     }
 
-    Auth(pin: string): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
-            post<string>("/api/auth", { pin: pin }).then(
-                (token: string) => {
-                    this.token = token;
-                    resolve();
-                },
-                (msg: string) => {
-                    reject();
-                }
-            );
-        });
+    async Auth(pin: string): Promise<void> {
+        this.token = await post<string>("/api/auth", { pin: pin });
     }
 
-    Add(data: OrderData): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
-            post("/api/add", { data: data, token: this.token }).then(
-                () => {
-                    resolve();
-                },
-                () => {
-                    reject();
-                }
-            );
-        });
+    async Add(data: OrderData): Promise<void> {
+        await post("/api/add", { data: data, token: this.token });
     }
 
-    List(code: string): Promise<OrderData[]> {
-        return new Promise<OrderData[]>((resolve, reject) => {
-            post("/api/list", { code: code, token: this.token }).then(
-                (data: OrderData[]) => {
-                    resolve(data);
-                },
-                () => {
-                    reject();
-                }
-            );
-        });
+    async List(code: string): Promise<OrderData[]> {
+        return await post<OrderData[]>("/api/list", { code: code, token: this.token });
     }
 
-    ListAll(): Promise<OrderData[]> {
-        return new Promise<OrderData[]>((resolve, reject) => {
-            post("/api/listall", { token: this.token }).then(
-                (data: OrderData[]) => {
-                    resolve(data);
-                },
-                () => {
-                    reject();
-                }
-            );
-        });
+    async ListAll(): Promise<OrderData[]> {
+        return await post<OrderData[]>("/api/listall", { token: this.token });
     }
 };
