@@ -1,3 +1,4 @@
+var LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 var webpack = require("webpack");
 const pkg = require("./package.json");
 module.exports = {
@@ -8,7 +9,7 @@ module.exports = {
 
   output: {
     filename: "[name].js",
-    path: "./js"
+    path: "./public/js"
   },
 
   plugins: [
@@ -16,6 +17,8 @@ module.exports = {
       name: "vendor",
       filename: "vendor.js"
     }),
+    new LodashModuleReplacementPlugin,
+    new webpack.optimize.OccurrenceOrderPlugin,
   ],
 
   // Enable sourcemaps for debugging webpack's output.
@@ -31,7 +34,7 @@ module.exports = {
       {
 	test: /\.tsx?$/,
 	loaders: [
-	  "babel-loader?presets[]=es2015",
+	  "babel-loader?presets[]=es2015&plugins[]=lodash",
 	  "ts-loader",
 	],
       },
@@ -44,7 +47,6 @@ module.exports = {
       {
 	test: /\.css/,
 	loader: "style-loader!css-loader",
-	exclude: /css\//,
       },
       { test: /\.(ttf|woff|eot|svg)/, loader: "url-loader" },
     ],

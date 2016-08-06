@@ -15,7 +15,8 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'node_modules/babel-polyfill/dist/polyfill.js',
-      './build/test/**/*Test.js'
+      './build/test/**/*Test.js',
+      './build/test/**/*.spec.js'
     ],
 
     // list of files to exclude
@@ -94,7 +95,6 @@ module.exports = function(config) {
     remapIstanbulReporter: {
       src: './coverage/coverage-final.json',
       reports: {
-    	html: './coverage',
     	text: null,
       },
     },
